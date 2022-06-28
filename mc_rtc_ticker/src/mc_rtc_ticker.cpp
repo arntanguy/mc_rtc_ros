@@ -62,28 +62,28 @@ int main()
   mc_control::MCGlobalController controller(conf);
   double dt = controller.timestep();
 
-  auto set_encoder = [&controller](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot)
-  {
+  auto set_encoder = [&controller](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot) {
     auto q = robot.encoderValues();
     if(q.size() != controller.ref_joint_order().size())
     {
       q.resize(controller.ref_joint_order().size());
     }
-    auto & mbc = controller.robot().mbc();
+    auto & mbc = robot.mbc();
     const auto & rjo = controller.ref_joint_order();
     unsigned i = 0;
     for(const auto & jn : rjo)
     {
-      if(controller.robot().hasJoint(jn))
+      if(robot.hasJoint(jn))
       {
-        for(auto & qj : mbc.q[controller.robot().jointIndexByName(jn)])
+        for(auto & qj : mbc.q[robot.jointIndexByName(jn)])
         {
           q[i++] = qj;
         }
       }
       else
       {
-        mc_rtc::log::error_and_throw("[mc_rtc_ticker] Joint {} is in ref_joint_order but not in robot {}", jn, controller.robot().name());
+        mc_rtc::log::error_and_throw("[mc_rtc_ticker] Joint {} is in ref_joint_order but not in robot {}", jn,
+                                     robot.name());
       }
     }
     robot.encoderValues(q);
