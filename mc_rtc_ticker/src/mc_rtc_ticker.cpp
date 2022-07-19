@@ -7,6 +7,7 @@
 #include <mc_rtc/logging.h>
 #include <mc_rtc/ros.h>
 #include <mc_rtc/version.h>
+#include <mc_rtc/io_utils.h>
 
 #include <ros/ros.h>
 
@@ -62,6 +63,8 @@ int main()
   mc_control::MCGlobalController controller(conf);
   double dt = controller.timestep();
 
+  /* Copy the control robot's joint values as encoder values for both the
+   * control and real robot */
   auto set_encoder = [](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot, bool warn = false) {
     const auto & rjo = robot.refJointOrder();
     auto & mbc = robot.mbc();
@@ -109,10 +112,43 @@ int main()
     realRobot.encoderValues(q);
   };
 
-  std::vector<double> q;
+  auto init_encoders = [](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot, const std::vector<double> & initq)
+  {
+    mc_rtc::log::info("[mc_rtc_ticker] Loading encoder values from ROS param for robot {}: [{}]", robot.name(), mc_rtc::io::to_string(initq));
+    const auto & rjo = robot.refJointOrder();
+    if(initq.size() != rjo.size())
+    {
+      mc_rtc::log::error_and_throw("[mc_rtc_ticker] Failed to initialize encoder values for robot \"{}\", you provided {} values but {} were expected", robot.name(), initq.size(), robot.refJointOrder().size());
+    }
+    robot.encoderValues(initq);
+    realRobot.encoderValues(initq);
+
+    auto & q = robot.mbc().q;
+    for(size_t i = 0; i < rjo.size(); ++i)
+    {
+      const auto & jn = rjo[i];
+      if(robot.hasJoint(jn))
+      {
+        q[robot.jointIndexByName(jn)][0] = initq[i];
+      }
+    }
+    realRobot.mbc().q = robot.mbc().q;
+    robot.forwardKinematics();
+    realRobot.forwardKinematics();
+  };
+
+  // Load initial encoder values for the MainRobot from rosparam (legacy)
   if(nh.hasParam("mc_rtc_ticker/init_state"))
   {
-    q = getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_state");
+    auto q = getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_state");
+    if(q.size() == controller.robot().refJointOrder().size())
+    {
+      init_encoders(controller.robot(), controller.realRobot(), q);
+    }
+    else
+    {
+      set_encoder(controller.robot(), controller.realRobot());
+    }
   }
   else
   {
@@ -121,23 +157,61 @@ int main()
       set_encoder(robot, controller.realRobot(robot.name()), true);
     }
   }
+  // Load initial floating base attitude for the MainRobot from rosparam
   if(nh.hasParam("mc_rtc_ticker/init_pos"))
   {
-    mc_rtc::log::info("Using initial pos from ROS param");
     std::vector<double> pos = getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_pos");
-    for(const auto & pi : pos)
+    if(pos.size() == 7)
     {
-      std::cout << pi << " ";
+      for(const auto & pi : pos)
+      {
+        std::cout << pi << " ";
+      }
+      std::cout << std::endl;
+      std::array<double, 7> p;
+      std::copy_n(pos.begin(), 7, p.begin());
+      mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}", controller.robot().name(), mc_rtc::io::to_string(p));
+      controller.init(controller.robot().encoderValues(), p);
     }
-    std::cout << std::endl;
-    std::array<double, 7> p;
-    std::copy_n(pos.begin(), 7, p.begin());
-    controller.init(q, p);
+    else
+    {
+      controller.init(controller.robot().encoderValues());
+    }
   }
   else
   {
     controller.init(controller.robot().encoderValues());
   }
+
+  // Load encoder/floating base attitude for additional robots either from rosparam or from the default module's configuration
+  for(auto & robot : controller.robots())
+  {
+    if(nh.hasParam("mc_rtc_ticker/init_state/"+robot.name()))
+    {
+      init_encoders(robot, controller.realRobot(robot.name()), getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_state/"+robot.name()));
+    }
+    else
+    {
+      set_encoder(robot, controller.realRobot(robot.name()));
+    }
+
+    if(nh.hasParam("mc_rtc_ticker/init_pos/" + robot.name()))
+    {
+      std::vector<double> initAttitude = getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_pos/" + robot.name());
+      mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}", controller.robot().name(), mc_rtc::io::to_string(initAttitude));
+      if(initAttitude.size() != 7)
+      {
+        mc_rtc::log::error_and_throw("[mc_rtc_ticker] Invalid attitude for robot {}: expected 7 values but {} provided", initAttitude.size());
+      }
+      auto & realRobot = controller.realRobot(robot.name());
+      robot.mbc().q[0] = {std::begin(initAttitude), std::end(initAttitude)};
+      mc_rtc::log::info("[mc_rtc_ticker] init q: {}", mc_rtc::io::to_string(robot.mbc().q[0]));
+      realRobot.mbc().q[0] = robot.mbc().q[0];
+      robot.forwardKinematics();
+      realRobot.forwardKinematics();
+    }
+  }
+
   controller.running = true;
 
   bool stepByStep = getParam(nh, "mc_rtc_ticker/stepByStep", false);
@@ -225,11 +299,7 @@ int main()
     });
   }
 
-  auto runController = [&, set_encoder]() {
-    for(auto & robot : controller.robots())
-    {
-      set_encoder(robot, controller.realRobot(robot.name()));
-    }
+  auto runController = [&]() {
     controller.run();
   };
 
@@ -245,21 +315,9 @@ int main()
     {
       begin = std::chrono::system_clock::now();
     }
-    auto & mbc = controller.robot().mbc();
-    const auto & rjo = controller.ref_joint_order();
-    q.resize(rjo.size());
-    size_t index = 0;
-    for(size_t i = 0; i < rjo.size(); ++i)
+    for(auto & robot : controller.robots())
     {
-      const auto & jn = rjo[i];
-      if(controller.robot().hasJoint(jn))
-      {
-        for(auto & qj : mbc.q[controller.robot().jointIndexByName(jn)])
-        {
-          q[index] = qj;
-          index++;
-        }
-      }
+      set_encoder(robot, controller.realRobot(robot.name()));
     }
     if(stepByStep)
     {
