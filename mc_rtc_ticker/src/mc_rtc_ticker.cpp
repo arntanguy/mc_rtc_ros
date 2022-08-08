@@ -4,10 +4,10 @@
 
 #include <mc_control/mc_global_controller.h>
 #include <mc_rtc/config.h>
+#include <mc_rtc/io_utils.h>
 #include <mc_rtc/logging.h>
 #include <mc_rtc/ros.h>
 #include <mc_rtc/version.h>
-#include <mc_rtc/io_utils.h>
 
 #include <ros/ros.h>
 
@@ -112,13 +112,15 @@ int main()
     realRobot.encoderValues(q);
   };
 
-  auto init_encoders = [](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot, const std::vector<double> & initq)
-  {
-    mc_rtc::log::info("[mc_rtc_ticker] Loading encoder values from ROS param for robot {}: [{}]", robot.name(), mc_rtc::io::to_string(initq));
+  auto init_encoders = [](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot, const std::vector<double> & initq) {
+    mc_rtc::log::info("[mc_rtc_ticker] Loading encoder values from ROS param for robot {}: [{}]", robot.name(),
+                      mc_rtc::io::to_string(initq));
     const auto & rjo = robot.refJointOrder();
     if(initq.size() != rjo.size())
     {
-      mc_rtc::log::error_and_throw("[mc_rtc_ticker] Failed to initialize encoder values for robot \"{}\", you provided {} values but {} were expected", robot.name(), initq.size(), robot.refJointOrder().size());
+      mc_rtc::log::error_and_throw("[mc_rtc_ticker] Failed to initialize encoder values for robot \"{}\", you provided "
+                                   "{} values but {} were expected",
+                                   robot.name(), initq.size(), robot.refJointOrder().size());
     }
     robot.encoderValues(initq);
     realRobot.encoderValues(initq);
@@ -170,7 +172,8 @@ int main()
       std::cout << std::endl;
       std::array<double, 7> p;
       std::copy_n(pos.begin(), 7, p.begin());
-      mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}", controller.robot().name(), mc_rtc::io::to_string(p));
+      mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}",
+                        controller.robot().name(), mc_rtc::io::to_string(p));
       controller.init(controller.robot().encoderValues(), p);
     }
     else
@@ -183,12 +186,14 @@ int main()
     controller.init(controller.robot().encoderValues());
   }
 
-  // Load encoder/floating base attitude for additional robots either from rosparam or from the default module's configuration
+  // Load encoder/floating base attitude for additional robots either from rosparam or from the default module's
+  // configuration
   for(auto & robot : controller.robots())
   {
-    if(nh.hasParam("mc_rtc_ticker/init_state/"+robot.name()))
+    if(nh.hasParam("mc_rtc_ticker/init_state/" + robot.name()))
     {
-      init_encoders(robot, controller.realRobot(robot.name()), getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_state/"+robot.name()));
+      init_encoders(robot, controller.realRobot(robot.name()),
+                    getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_state/" + robot.name()));
     }
     else
     {
@@ -198,10 +203,12 @@ int main()
     if(nh.hasParam("mc_rtc_ticker/init_pos/" + robot.name()))
     {
       std::vector<double> initAttitude = getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_pos/" + robot.name());
-      mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}", controller.robot().name(), mc_rtc::io::to_string(initAttitude));
+      mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}",
+                        controller.robot().name(), mc_rtc::io::to_string(initAttitude));
       if(initAttitude.size() != 7)
       {
-        mc_rtc::log::error_and_throw("[mc_rtc_ticker] Invalid attitude for robot {}: expected 7 values but {} provided", initAttitude.size());
+        mc_rtc::log::error_and_throw("[mc_rtc_ticker] Invalid attitude for robot {}: expected 7 values but {} provided",
+                                     initAttitude.size());
       }
       auto & realRobot = controller.realRobot(robot.name());
       robot.mbc().q[0] = {std::begin(initAttitude), std::end(initAttitude)};
@@ -299,9 +306,7 @@ int main()
     });
   }
 
-  auto runController = [&]() {
-    controller.run();
-  };
+  auto runController = [&]() { controller.run(); };
 
   auto updateGUI = [&]() {
     controller.running = false;
