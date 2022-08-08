@@ -62,14 +62,14 @@ int main()
   mc_control::MCGlobalController controller(conf);
   double dt = controller.timestep();
 
-  auto set_encoder = [&controller](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot) {
-    auto q = robot.encoderValues();
-    if(q.size() != controller.ref_joint_order().size())
-    {
-      q.resize(controller.ref_joint_order().size());
-    }
+  auto set_encoder = [](mc_rbdyn::Robot & robot, mc_rbdyn::Robot & realRobot, bool warn = false) {
+    const auto & rjo = robot.refJointOrder();
     auto & mbc = robot.mbc();
-    const auto & rjo = controller.ref_joint_order();
+    auto q = robot.encoderValues();
+    if(q.size() != rjo.size())
+    {
+      q.resize(rjo.size());
+    }
     unsigned i = 0;
     for(const auto & jn : rjo)
     {
@@ -82,8 +82,27 @@ int main()
       }
       else
       {
-        mc_rtc::log::error_and_throw("[mc_rtc_ticker] Joint {} is in ref_joint_order but not in robot {}", jn,
-                                     robot.name());
+        if(robot.module().stance().count(jn))
+        {
+          auto stance_q = robot.module().stance().at(jn)[0];
+          q[i++] = stance_q;
+          if(warn)
+          {
+            mc_rtc::log::warning(
+                "[mc_rtc_ticker] Joint {} is in ref_joint_order but not in robot {}, using its default stance: {}", jn,
+                robot.name(), stance_q);
+          }
+        }
+        else
+        {
+          if(warn)
+          {
+            mc_rtc::log::warning("[mc_rtc_ticker] Joint {} is in ref_joint_order but not in robot {}, and no default "
+                                 "stance is provided, assuming 0.0",
+                                 jn, robot.name());
+          }
+          q[i++] = 0;
+        }
       }
     }
     robot.encoderValues(q);
@@ -99,7 +118,7 @@ int main()
   {
     for(auto & robot : controller.robots())
     {
-      set_encoder(robot, controller.realRobot(robot.name()));
+      set_encoder(robot, controller.realRobot(robot.name()), true);
     }
   }
   if(nh.hasParam("mc_rtc_ticker/init_pos"))
