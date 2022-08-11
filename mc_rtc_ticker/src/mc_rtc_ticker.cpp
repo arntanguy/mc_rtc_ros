@@ -159,17 +159,13 @@ int main()
       set_encoder(robot, controller.realRobot(robot.name()), true);
     }
   }
+
   // Load initial floating base attitude for the MainRobot from rosparam
   if(nh.hasParam("mc_rtc_ticker/init_pos"))
   {
     std::vector<double> pos = getParam<std::vector<double>>(nh, "mc_rtc_ticker/init_pos");
     if(pos.size() == 7)
     {
-      for(const auto & pi : pos)
-      {
-        std::cout << pi << " ";
-      }
-      std::cout << std::endl;
       std::array<double, 7> p;
       std::copy_n(pos.begin(), 7, p.begin());
       mc_rtc::log::info("[mc_rtc_ticker] Using initial attitude from ROS param for robot {}: {}",
@@ -261,7 +257,7 @@ int main()
     solve_dt.reserve(1000000);
   }
   auto report_dt = [&solve_dt](bool partial) {
-    std::cout << "Ran for " << solve_dt.size() << " iterations: ";
+    mc_rtc::log::info("[mc_rtc_ticker] Ran for {} iterations: ", solve_dt.size());
     size_t start_i = partial ? solve_dt.size() - 1000 : 0;
     auto min_t = solve_dt[start_i];
     auto max_t = solve_dt[start_i];
@@ -289,8 +285,8 @@ int main()
     {
       average_t = average_t / solve_dt.size();
     }
-    std::cout << " avg: " << average_t.count() * 1000 << "ms, min: " << min_t.count() * 1000
-              << "ms, max: " << max_t.count() * 1000 << "ms, second max: " << second_max_t.count() * 1000 << std::endl;
+    mc_rtc::log::info("[mc_rtc_ticker] avg: {}ms, min: {}ms, max: {}ms, second max: {}ms", average_t.count() * 1000,
+                      min_t.count() * 1000, max_t.count() * 1000, second_max_t.count() * 1000);
   };
 
   ros::Rate rt(1 / dt);
