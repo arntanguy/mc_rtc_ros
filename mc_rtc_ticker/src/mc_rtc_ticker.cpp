@@ -12,6 +12,14 @@
 
 #include <chrono>
 #include <iostream>
+#include <signal.h>
+
+// Define the function to be called when ctrl-c (SIGINT) is sent to process
+bool running_ = true;
+void signal_callback_handler(int signum)
+{
+  running_ = false;
+}
 
 namespace
 {
@@ -213,7 +221,8 @@ int main()
     controller.running = true;
   };
 
-  while(ros::ok())
+  signal(SIGINT, signal_callback_handler);
+  while(running_)
   {
     if(bench)
     {
