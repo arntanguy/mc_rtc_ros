@@ -27,7 +27,7 @@ set(MOC_HEADERS
     # TransformInteractiveMarkerWidget.h
     VisualWidget.h
     # XYThetaInteractiveMarkerWidget.h
-    # DisplayTrajectoryWidget.h
+    DisplayTrajectoryWidget.h
     # PolygonMarkerWidget.h
     # PolyhedronMarkerWidget.h
     plugin.h)
@@ -100,7 +100,7 @@ set(SOURCE_FILES
     # TransformInteractiveMarkerWidget.cpp
     VisualWidget.cpp
     # XYThetaInteractiveMarkerWidget.cpp
-    # DisplayTrajectoryWidget.cpp
+    DisplayTrajectoryWidget.cpp
     # PolygonMarkerWidget.cpp
     # PolyhedronMarkerWidget.cpp
     # utils.cpp

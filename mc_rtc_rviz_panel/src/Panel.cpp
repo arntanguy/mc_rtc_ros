@@ -3,6 +3,7 @@
  */
 
 #include "Panel.h"
+#include <mc_rtc/ros.h>
 
 #include "ArrayInputWidget.h"
 #include "ArrayLabelWidget.h"
@@ -11,7 +12,7 @@
 #include "CheckboxWidget.h"
 #include "ComboInputWidget.h"
 #include "ConnectionDialog.h"
-//#include "DisplayTrajectoryWidget.h"
+#include "DisplayTrajectoryWidget.h"
 //#include "ForceInteractiveMarkerWidget.h"
 //#include "FormElement.h"
 // #include "FormWidget.h"
@@ -113,16 +114,24 @@ double getTimeout()
 struct PanelImpl
 {
   PanelImpl()
-  /* : nh_() ,
+  : nh_(mc_rtc::ROSBridge::get_node_handle()) /* ,
     int_server_(std::make_shared<interactive_markers::InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers")) */
   {
-    // marker_array_pub_ =
-    //     mc_rtc::ROSBridge::get_node_handle()->advertise<visualization_msgs::MarkerArray>("/mc_rtc_rviz", 0);
+#ifdef MC_RTC_ROS_IS_ROS2
+    marker_array_pub_ = nh_->create_publisher<MarkerArray>("/mc_rtc_rviz", 0);
+#else
+    marker_array_pub_ = nh_.advertise<MarkerArray>("/mc_rtc_rviz", 0);
+#endif
   }
-  // ros::NodeHandle nh_;
+#ifdef MC_RTC_ROS_IS_ROS2
+  std::shared_ptr<rclcpp::Node> nh_;
+  rclcpp::Publisher<MarkerArray>::SharedPtr marker_array_pub_;
+#else
+  ros::NodeHandle nh_;
+  ros::Publisher marker_array_pub_;
+#endif
   // std::shared_ptr<interactive_markers::InteractiveMarkerServer> int_server_;
   MarkerArray marker_array_;
-  // ros::Publisher marker_array_pub_;
 };
 
 Panel::Panel(QWidget * parent)
@@ -271,10 +280,18 @@ void Panel::got_stop()
 {
   tree_.clean();
   this->clean();
+#ifdef MC_RTC_ROS_IS_ROS2
+  impl_->marker_array_pub_->publish(impl_->marker_array_);
+  if(rclcpp::ok())
+  {
+    rclcpp::spin_some(impl_->nh_);
+  }
+#else
   // impl_->int_server_->applyChanges();
-  // impl_->marker_array_pub_.publish(impl_->marker_array_);
   // impl_->marker_array_.markers.clear();
-  // if(ros::ok()) { ros::spinOnce(); }
+  impl_->marker_array_pub_.publish(impl_->marker_array_);
+  if(ros::ok()) { ros::spinOnce(); }
+#endif
 }
 
 Panel::~Panel()
@@ -779,28 +796,28 @@ void Panel::got_trajectory(const WidgetId & id,
                            const std::vector<Eigen::Vector3d> & points,
                            const mc_rtc::gui::LineConfig & config)
 {
-  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  // w.update(points, config);
+  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  w.update(points, config);
 }
 
 void Panel::got_trajectory(const WidgetId & id,
                            const std::vector<sva::PTransformd> & points,
                            const mc_rtc::gui::LineConfig & config)
 {
-  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  // w.update(points, config);
+  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  w.update(points, config);
 }
 
 void Panel::got_trajectory(const WidgetId & id, const Eigen::Vector3d & point, const mc_rtc::gui::LineConfig & config)
 {
-  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  // w.update(point, config);
+  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  w.update(point, config);
 }
 
 void Panel::got_trajectory(const WidgetId & id, const sva::PTransformd & point, const mc_rtc::gui::LineConfig & config)
 {
-  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  // w.update(point, config);
+  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  w.update(point, config);
 }
 
 void Panel::got_polygon(const WidgetId & id,
