@@ -20,7 +20,7 @@ set(MOC_HEADERS
     # SchemaWidget.h
     TableWidget.h
     # ROS WIDGETS
-    # InteractiveMarkerWidget.h
+    InteractiveMarkerWidget.h
     # ArrowInteractiveMarkerWidget.h
     # ForceInteractiveMarkerWidget.h
     # Point3DInteractiveMarkerWidget.h
@@ -93,7 +93,7 @@ set(SOURCE_FILES
     # SchemaArrayInput.cpp
     # SchemaWidget.cpp
     TableWidget.cpp
-    # InteractiveMarkerWidget.cpp
+    InteractiveMarkerWidget.cpp
     # ArrowInteractiveMarkerWidget.cpp
     # ForceInteractiveMarkerWidget.cpp
     # Point3DInteractiveMarkerWidget.cpp

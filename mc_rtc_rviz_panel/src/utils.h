@@ -29,12 +29,17 @@ using Marker = visualization_msgs::msg::Marker;
 using MarkerArray = visualization_msgs::msg::MarkerArray;
 using Point = geometry_msgs::msg::Point;
 using InteractiveMarker = visualization_msgs::msg::InteractiveMarker;
+using InteractiveMarkerServer = interactive_markers::InteractiveMarkerServer;
+using InteractiveMarkerFeedbackConstPtr =
+  visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr;
 using Pose = geometry_msgs::msg::Pose;
 #else
 using Marker = visualization_msgs::Marker;
 using MarkerArray = visualization_msgs::MarkerArray;
 using Point = geometry_msgs::Point;
 using InteractiveMarker = visualization_msgs::InteractiveMarker;
+using InteraInteractiveMarkerServerctiveMarkerServer = interactive_markers::InteractiveMarkerServer;
+using InteractiveMarkerFeedbackConstPtr = visualization_msgs::InteractiveMarkerFeedbackConstPtr;
 using Pose = geometry_msgs::Pose;
 #endif
 
@@ -80,10 +85,10 @@ std::vector<Marker> makeArrowMarker(const Eigen::Vector3d & start,
 
 struct SharedMarker
 {
-  SharedMarker(std::shared_ptr<interactive_markers::InteractiveMarkerServer> server,
+  SharedMarker(std::shared_ptr<InteractiveMarkerServer> server,
                const std::string & name,
                const InteractiveMarker & marker,
-               interactive_markers::InteractiveMarkerServer::FeedbackCallback callback);
+               InteractiveMarkerServer::FeedbackCallback callback);
 
   ~SharedMarker();
 
@@ -105,9 +110,9 @@ struct SharedMarker
   void applyChanges() { server_->applyChanges(); }
 
 private:
-  std::shared_ptr<interactive_markers::InteractiveMarkerServer> server_;
+  std::shared_ptr<InteractiveMarkerServer> server_;
   InteractiveMarker marker_;
-  interactive_markers::InteractiveMarkerServer::FeedbackCallback callback_;
+  InteractiveMarkerServer::FeedbackCallback callback_;
   bool hidden_ = false;
 };
 
