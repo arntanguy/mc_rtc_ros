@@ -10,24 +10,34 @@
 #include <SpaceVecAlg/SpaceVecAlg>
 
 #ifdef MC_RTC_ROS_IS_ROS2
-#include "visualization_msgs/msg/interactive_marker.hpp"
-#include "visualization_msgs/msg/interactive_marker_control.hpp"
-#include "interactive_markers/msg/interactive_marker_server.hpp"
+#include <visualization_msgs/msg/interactive_marker.hpp>
+#include <visualization_msgs/msg/interactive_marker_control.hpp>
+#include <interactive_markers/interactive_marker_server.hpp>
+#include <visualization_msgs/msg/marker_array.hpp>
 #else
 #include <visualization_msgs/InteractiveMarker.h>
 #include <visualization_msgs/InteractiveMarkerControl.h>
 #include <interactive_markers/interactive_marker_server.h>
 #endif
 
-#ifdef MC_RTC_ROS_IS_ROS2
-namespace vm = visualization_msgs::msg;
-#else
-namespace vm = visualization_msgs;
-#endif
-
 
 namespace mc_rtc_rviz
 {
+
+#ifdef MC_RTC_ROS_IS_ROS2
+using Marker = visualization_msgs::msg::Marker;
+using MarkerArray = visualization_msgs::msg::MarkerArray;
+using Point = geometry_msgs::msg::Point;
+using InteractiveMarker = visualization_msgs::msg::InteractiveMarker;
+using Pose = geometry_msgs::msg::Pose;
+#else
+using Marker = visualization_msgs::Marker;
+using MarkerArray = visualization_msgs::MarkerArray;
+using Point = geometry_msgs::Point;
+using InteractiveMarker = visualization_msgs::InteractiveMarker;
+using Pose = geometry_msgs::Pose;
+#endif
+
 
 // Check if at least one values in x.array() is nan
 template<typename Derived>
@@ -42,13 +52,13 @@ inline bool is_in_range(const Eigen::MatrixBase<Derived> & x, double min = -10e1
   return (x.array() > min).all() && (x.array() < max).all();
 }
 
-visualization_msgs::Marker getPointMarker(const Eigen::Vector3d & pos, const mc_rtc::gui::Color & color, double scale);
-geometry_msgs::Point rosPoint(const Eigen::Vector3d & vec);
-vm::Marker makeVisual(int t, double baseScale);
-vm::InteractiveMarker makeInteractiveMarker(const std::string & name, const std::vector<vm::Marker> & visual_markers);
-std::vector<vm::Marker> makeAxisMarker(double baseScale);
-vm::InteractiveMarker make6DMarker(const std::string & name,
-                                   const std::vector<vm::Marker> & visual_markers,
+Marker getPointMarker(const Eigen::Vector3d & pos, const mc_rtc::gui::Color & color, double scale);
+Point rosPoint(const Eigen::Vector3d & vec);
+Marker makeVisual(int t, double baseScale);
+InteractiveMarker makeInteractiveMarker(const std::string & name, const std::vector<Marker> & visual_markers);
+std::vector<Marker> makeAxisMarker(double baseScale);
+InteractiveMarker make6DMarker(const std::string & name,
+                                   const std::vector<Marker> & visual_markers,
                                    bool control_position,
                                    bool control_orientation,
                                    bool move_x = true,
@@ -57,14 +67,14 @@ vm::InteractiveMarker make6DMarker(const std::string & name,
                                    bool rotate_x = true,
                                    bool rotate_y = true,
                                    bool rotate_z = true);
-vm::InteractiveMarker make3DMarker(const std::string & name,
-                                   const std::vector<vm::Marker> & visual_markers,
+InteractiveMarker make3DMarker(const std::string & name,
+                                   const std::vector<Marker> & visual_markers,
                                    bool control_position,
                                    bool move_x = true,
                                    bool move_y = true,
                                    bool move_z = true);
-vm::InteractiveMarker makeXYThetaMarker(const std::string & name, bool readonly = false);
-std::vector<vm::Marker> makeArrowMarker(const Eigen::Vector3d & start,
+InteractiveMarker makeXYThetaMarker(const std::string & name, bool readonly = false);
+std::vector<Marker> makeArrowMarker(const Eigen::Vector3d & start,
                                         const Eigen::Vector3d & end,
                                         const mc_rtc::gui::ArrowConfig & c);
 
@@ -72,7 +82,7 @@ struct SharedMarker
 {
   SharedMarker(std::shared_ptr<interactive_markers::InteractiveMarkerServer> server,
                const std::string & name,
-               const vm::InteractiveMarker & marker,
+               const InteractiveMarker & marker,
                interactive_markers::InteractiveMarkerServer::FeedbackCallback callback);
 
   ~SharedMarker();
@@ -83,20 +93,20 @@ struct SharedMarker
 
   void update(const sva::PTransformd & pos);
 
-  void marker(const vm::InteractiveMarker & marker)
+  void marker(const InteractiveMarker & marker)
   {
     server_->erase(marker_.name);
     marker_ = marker;
     server_->insert(marker_, callback_);
   }
 
-  vm::InteractiveMarker & marker() { return marker_; }
+  InteractiveMarker & marker() { return marker_; }
 
   void applyChanges() { server_->applyChanges(); }
 
 private:
   std::shared_ptr<interactive_markers::InteractiveMarkerServer> server_;
-  vm::InteractiveMarker marker_;
+  InteractiveMarker marker_;
   interactive_markers::InteractiveMarkerServer::FeedbackCallback callback_;
   bool hidden_ = false;
 };

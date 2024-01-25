@@ -26,7 +26,7 @@
 // #include "SchemaWidget.h"
 #include "TableWidget.h"
 //#include "TransformInteractiveMarkerWidget.h"
-//#include "VisualWidget.h"
+#include "VisualWidget.h"
 //#include "XYThetaInteractiveMarkerWidget.h"
 
 #include <boost/filesystem.hpp>
@@ -121,7 +121,7 @@ struct PanelImpl
   }
   // ros::NodeHandle nh_;
   // std::shared_ptr<interactive_markers::InteractiveMarkerServer> int_server_;
-  // visualization_msgs::MarkerArray marker_array_;
+  MarkerArray marker_array_;
   // ros::Publisher marker_array_pub_;
 };
 
@@ -886,8 +886,8 @@ void Panel::got_robot(const WidgetId & id,
 
 void Panel::got_visual(const WidgetId & id, const rbd::parsers::Visual & visual, const sva::PTransformd & pose)
 {
-  // auto & w = get_widget<VisualWidget>(id, impl_->marker_array_);
-  // w.update(visual, pose);
+  auto & w = get_widget<VisualWidget>(id, impl_->marker_array_);
+  w.update(visual, pose);
 }
 
 void Panel::got_form(const WidgetId & id)

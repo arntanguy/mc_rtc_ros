@@ -25,7 +25,7 @@ set(MOC_HEADERS
     # ForceInteractiveMarkerWidget.h
     # Point3DInteractiveMarkerWidget.h
     # TransformInteractiveMarkerWidget.h
-    # VisualWidget.h
+    VisualWidget.h
     # XYThetaInteractiveMarkerWidget.h
     # DisplayTrajectoryWidget.h
     # PolygonMarkerWidget.h
@@ -98,7 +98,7 @@ set(SOURCE_FILES
     # ForceInteractiveMarkerWidget.cpp
     # Point3DInteractiveMarkerWidget.cpp
     # TransformInteractiveMarkerWidget.cpp
-    # VisualWidget.cpp
+    VisualWidget.cpp
     # XYThetaInteractiveMarkerWidget.cpp
     # DisplayTrajectoryWidget.cpp
     # PolygonMarkerWidget.cpp
@@ -122,94 +122,49 @@ endif()
 add_library(_gui_objects OBJECT ${SOURCE_FILES})
 target_compile_definitions(_gui_objects
                            PRIVATE -DMC_RTC_DOCDIR="${MC_RTC_DOCDIR}")
+
+macro(panel_link_libraries target)
+  target_include_directories(
+    _gui_objects
+    PUBLIC $<TARGET_PROPERTY:${target},INTERFACE_INCLUDE_DIRECTORIES>)
+  target_compile_definitions(
+    _gui_objects
+    PUBLIC $<TARGET_PROPERTY:${target},INTERFACE_COMPILE_DEFINITIONS>)
+  target_compile_features(
+    _gui_objects
+    PUBLIC $<TARGET_PROPERTY:${target},INTERFACE_COMPILE_FEATURES>)
+endmacro()
+
 if(NOT ${FORCE_QT5} AND "${ROS_DISTRO}" STREQUAL "indigo")
-  target_include_directories(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt4::QtCore,INTERFACE_INCLUDE_DIRECTORIES>)
-  target_compile_definitions(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt4::QtCore,INTERFACE_COMPILE_DEFINITIONS>)
-  target_include_directories(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt4::QtGui,INTERFACE_INCLUDE_DIRECTORIES>)
-  target_compile_definitions(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt4::QtGui,INTERFACE_COMPILE_DEFINITIONS>)
+  panel_link_libraries(Qt4::QtCore)
+  panel_link_libraries(Qt4::QtGui)
 else()
-  target_include_directories(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>)
-  target_compile_definitions(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt5::Core,INTERFACE_COMPILE_DEFINITIONS>)
-  target_include_directories(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>)
-  target_compile_definitions(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_COMPILE_DEFINITIONS>)
-  target_include_directories(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>)
-  target_compile_definitions(
-    _gui_objects
-    PRIVATE $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_COMPILE_DEFINITIONS>)
+  panel_link_libraries(Qt5::Core)
+  panel_link_libraries(Qt5::Gui)
+  panel_link_libraries(Qt5::Widgets)
 endif()
 target_compile_options(_gui_objects PRIVATE -fPIC)
 target_include_directories(
   _gui_objects PUBLIC $<TARGET_PROPERTY:Qwt::Qwt,INTERFACE_INCLUDE_DIRECTORIES>)
-target_include_directories(
-  _gui_objects
-  PUBLIC
-    $<TARGET_PROPERTY:mc_rtc::mc_control_client,INTERFACE_INCLUDE_DIRECTORIES>)
-target_compile_definitions(
-  _gui_objects
-  PUBLIC
-    $<TARGET_PROPERTY:mc_rtc::mc_control_client,INTERFACE_COMPILE_DEFINITIONS>)
-target_compile_features(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:mc_rtc::mc_control_client,INTERFACE_COMPILE_FEATURES>
-)
-target_include_directories(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:mc_rtc::mc_rtc_ros,INTERFACE_INCLUDE_DIRECTORIES>)
-target_compile_definitions(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:mc_rtc::mc_rtc_ros,INTERFACE_COMPILE_DEFINITIONS>)
-target_compile_features(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:mc_rtc::mc_rtc_ros,INTERFACE_COMPILE_FEATURES>)
 
-target_include_directories(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:rviz_common::rviz_common,INTERFACE_INCLUDE_DIRECTORIES>)
-target_compile_definitions(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:rviz_common::rviz_common,INTERFACE_COMPILE_DEFINITIONS>)
-target_compile_features(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:rviz_common::rviz_common,INTERFACE_COMPILE_FEATURES>)
-
-target_include_directories(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:pluginlib::pluginlib,INTERFACE_INCLUDE_DIRECTORIES>)
-target_compile_definitions(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:pluginlib::pluginlib,INTERFACE_COMPILE_DEFINITIONS>)
-target_compile_features(
-  _gui_objects
-  PUBLIC $<TARGET_PROPERTY:pluginlib::pluginlib,INTERFACE_COMPILE_FEATURES>)
-
+panel_link_libraries(mc_rtc::mc_rtc_ros)
+panel_link_libraries(mc_rtc::mc_control_client)
+panel_link_libraries(rviz_common::rviz_common)
+panel_link_libraries(pluginlib::pluginlib)
+panel_link_libraries(visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
+panel_link_libraries(interactive_markers::interactive_markers)
+panel_link_libraries(tf2_ros::tf2_ros)
 
 add_library(${PROJECT_NAME} Panel.cpp ${HEADER_FILES} ${MOC_HEADERS}
                             $<TARGET_OBJECTS:_gui_objects>)
-target_link_libraries(${PROJECT_NAME} PUBLIC rclcpp::rclcpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC tf2_ros::tf2_ros)
-#target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
-message(STATUS "visualization_msgs_TARGETS: ${visualization_msgs_TARGETS}")
-target_link_libraries(${PROJECT_NAME} PUBLIC ${visualization_msgs_TARGETS})
-target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros mc_rtc::mc_control_client Qwt::Qwt)
+target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros)
+target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_control_client)
+target_link_libraries(${PROJECT_NAME} PUBLIC rviz_common::rviz_common)
+target_link_libraries(${PROJECT_NAME} PUBLIC pluginlib::pluginlib)
+target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC interactive_markers::interactive_markers)
+target_link_libraries(${PROJECT_NAME} PUBLIC tf2_ros::tf2_ros)
 
 
 target_link_libraries(${PROJECT_NAME} PUBLIC)

@@ -27,6 +27,7 @@ find_package(pluginlib REQUIRED)
 find_package(rviz_common REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(visualization_msgs REQUIRED)
+find_package(interactive_markers REQUIRED)
 # catkin_package(CATKIN_DEPENDS roscpp tf rviz roslib)
 
 # include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
