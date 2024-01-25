@@ -5,13 +5,26 @@
 #pragma once
 
 #include <mc_rtc/gui/types.h>
+#include <mc_rtc_ros/ros.h>
 
 #include <SpaceVecAlg/SpaceVecAlg>
+
+#ifdef MC_RTC_ROS_IS_ROS2
+#include "visualization_msgs/msg/interactive_marker.hpp"
+#include "visualization_msgs/msg/interactive_marker_control.hpp"
+#include "interactive_markers/msg/interactive_marker_server.hpp"
+#else
 #include <visualization_msgs/InteractiveMarker.h>
 #include <visualization_msgs/InteractiveMarkerControl.h>
 #include <interactive_markers/interactive_marker_server.h>
+#endif
 
+#ifdef MC_RTC_ROS_IS_ROS2
+namespace vm = visualization_msgs::msg;
+#else
 namespace vm = visualization_msgs;
+#endif
+
 
 namespace mc_rtc_rviz
 {

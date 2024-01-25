@@ -3,11 +3,12 @@
  */
 
 #include "plugin.h"
+#include <rviz_common/panel.hpp>
 
 namespace mc_rtc_rviz
 {
 
-MyPanel::MyPanel(QWidget * parent) : rviz::Panel(parent)
+MyPanel::MyPanel(QWidget * parent) : rviz_common::Panel(parent)
 {
   auto layout = new QVBoxLayout();
   panel = new mc_rtc_rviz::Panel(parent);
@@ -19,5 +20,5 @@ MyPanel::~MyPanel() {}
 
 } // namespace mc_rtc_rviz
 
-#include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(mc_rtc_rviz::MyPanel, rviz::Panel)
+#include <pluginlib/class_list_macros.hpp>
+PLUGINLIB_EXPORT_CLASS(mc_rtc_rviz::MyPanel, rviz_common::Panel)

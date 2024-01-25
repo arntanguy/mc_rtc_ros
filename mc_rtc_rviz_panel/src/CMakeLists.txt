@@ -10,25 +10,26 @@ set(MOC_HEADERS
     CheckboxWidget.h
     ComboInputWidget.h
     ConnectionDialog.h
-    FormElement.h
-    FormWidget.h
+    # FormElement.h
+    # FormWidget.h
     GenericInputWidget.h
     NumberSliderWidget.h
     PlotWidget.h
     PlotTabWidget.h
-    SchemaArrayInput.h
-    SchemaWidget.h
+    # SchemaArrayInput.h
+    # SchemaWidget.h
     TableWidget.h
-    InteractiveMarkerWidget.h
-    ArrowInteractiveMarkerWidget.h
-    ForceInteractiveMarkerWidget.h
-    Point3DInteractiveMarkerWidget.h
-    TransformInteractiveMarkerWidget.h
-    VisualWidget.h
-    XYThetaInteractiveMarkerWidget.h
-    DisplayTrajectoryWidget.h
-    PolygonMarkerWidget.h
-    PolyhedronMarkerWidget.h
+    # ROS WIDGETS
+    # InteractiveMarkerWidget.h
+    # ArrowInteractiveMarkerWidget.h
+    # ForceInteractiveMarkerWidget.h
+    # Point3DInteractiveMarkerWidget.h
+    # TransformInteractiveMarkerWidget.h
+    # VisualWidget.h
+    # XYThetaInteractiveMarkerWidget.h
+    # DisplayTrajectoryWidget.h
+    # PolygonMarkerWidget.h
+    # PolyhedronMarkerWidget.h
     plugin.h)
 
 if(NOT DEFINED ENV{ROS_DISTRO})
@@ -67,7 +68,8 @@ set(HEADER_FILES
     FormElementContainer.h
     LabelWidget.h
     Schema.h
-    utils.h)
+    #utils.h
+    )
 
 set(SOURCE_FILES
     ArrayLabelWidget.cpp
@@ -79,29 +81,29 @@ set(SOURCE_FILES
     ComboInputWidget.cpp
     ConnectionConfiguration.cpp
     ConnectionDialog.cpp
-    FormElement.cpp
-    FormElementContainer.cpp
-    FormWidget.cpp
+    # FormElement.cpp
+    # FormElementContainer.cpp
+    # FormWidget.cpp
     GenericInputWidget.cpp
     LabelWidget.cpp
     NumberSliderWidget.cpp
     PlotWidget.cpp
     PlotTabWidget.cpp
-    Schema.cpp
-    SchemaArrayInput.cpp
-    SchemaWidget.cpp
+    # Schema.cpp
+    # SchemaArrayInput.cpp
+    # SchemaWidget.cpp
     TableWidget.cpp
-    InteractiveMarkerWidget.cpp
-    ArrowInteractiveMarkerWidget.cpp
-    ForceInteractiveMarkerWidget.cpp
-    Point3DInteractiveMarkerWidget.cpp
-    TransformInteractiveMarkerWidget.cpp
-    VisualWidget.cpp
-    XYThetaInteractiveMarkerWidget.cpp
-    DisplayTrajectoryWidget.cpp
-    PolygonMarkerWidget.cpp
-    PolyhedronMarkerWidget.cpp
-    utils.cpp
+    # InteractiveMarkerWidget.cpp
+    # ArrowInteractiveMarkerWidget.cpp
+    # ForceInteractiveMarkerWidget.cpp
+    # Point3DInteractiveMarkerWidget.cpp
+    # TransformInteractiveMarkerWidget.cpp
+    # VisualWidget.cpp
+    # XYThetaInteractiveMarkerWidget.cpp
+    # DisplayTrajectoryWidget.cpp
+    # PolygonMarkerWidget.cpp
+    # PolyhedronMarkerWidget.cpp
+    # utils.cpp
     plugin.cpp
     ${MOC_FILES}
     ${QRC_FILES})
@@ -178,12 +180,37 @@ target_compile_features(
   _gui_objects
   PUBLIC $<TARGET_PROPERTY:mc_rtc::mc_rtc_ros,INTERFACE_COMPILE_FEATURES>)
 
+target_include_directories(
+  _gui_objects
+  PUBLIC $<TARGET_PROPERTY:rviz_common::rviz_common,INTERFACE_INCLUDE_DIRECTORIES>)
+target_compile_definitions(
+  _gui_objects
+  PUBLIC $<TARGET_PROPERTY:rviz_common::rviz_common,INTERFACE_COMPILE_DEFINITIONS>)
+target_compile_features(
+  _gui_objects
+  PUBLIC $<TARGET_PROPERTY:rviz_common::rviz_common,INTERFACE_COMPILE_FEATURES>)
+
+target_include_directories(
+  _gui_objects
+  PUBLIC $<TARGET_PROPERTY:pluginlib::pluginlib,INTERFACE_INCLUDE_DIRECTORIES>)
+target_compile_definitions(
+  _gui_objects
+  PUBLIC $<TARGET_PROPERTY:pluginlib::pluginlib,INTERFACE_COMPILE_DEFINITIONS>)
+target_compile_features(
+  _gui_objects
+  PUBLIC $<TARGET_PROPERTY:pluginlib::pluginlib,INTERFACE_COMPILE_FEATURES>)
+
+
 add_library(${PROJECT_NAME} Panel.cpp ${HEADER_FILES} ${MOC_HEADERS}
                             $<TARGET_OBJECTS:_gui_objects>)
-add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(
-  ${PROJECT_NAME} PUBLIC ${catkin_LIBRARIES} mc_rtc::mc_rtc_ros
-                         mc_rtc::mc_control_client Qwt::Qwt)
+target_link_libraries(${PROJECT_NAME} PUBLIC rclcpp::rclcpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC tf2_ros::tf2_ros)
+#target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
+message(STATUS "visualization_msgs_TARGETS: ${visualization_msgs_TARGETS}")
+target_link_libraries(${PROJECT_NAME} PUBLIC ${visualization_msgs_TARGETS})
+target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros mc_rtc::mc_control_client Qwt::Qwt)
+
 
 target_link_libraries(${PROJECT_NAME} PUBLIC)
 if(NOT ${FORCE_QT5} AND "${ROS_DISTRO}" STREQUAL "indigo")

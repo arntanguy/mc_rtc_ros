@@ -6,28 +6,28 @@
 
 #include "ArrayInputWidget.h"
 #include "ArrayLabelWidget.h"
-#include "ArrowInteractiveMarkerWidget.h"
+//#include "ArrowInteractiveMarkerWidget.h"
 #include "ButtonWidget.h"
 #include "CheckboxWidget.h"
 #include "ComboInputWidget.h"
 #include "ConnectionDialog.h"
-#include "DisplayTrajectoryWidget.h"
-#include "ForceInteractiveMarkerWidget.h"
-#include "FormElement.h"
-#include "FormWidget.h"
+//#include "DisplayTrajectoryWidget.h"
+//#include "ForceInteractiveMarkerWidget.h"
+//#include "FormElement.h"
+// #include "FormWidget.h"
 #include "GenericInputWidget.h"
-#include "InteractiveMarkerWidget.h"
+//#include "InteractiveMarkerWidget.h"
 #include "LabelWidget.h"
 #include "NumberSliderWidget.h"
 #include "PlotTabWidget.h"
-#include "Point3DInteractiveMarkerWidget.h"
-#include "PolygonMarkerWidget.h"
-#include "PolyhedronMarkerWidget.h"
-#include "SchemaWidget.h"
+//#include "Point3DInteractiveMarkerWidget.h"
+//#include "PolygonMarkerWidget.h"
+//#include "PolyhedronMarkerWidget.h"
+// #include "SchemaWidget.h"
 #include "TableWidget.h"
-#include "TransformInteractiveMarkerWidget.h"
-#include "VisualWidget.h"
-#include "XYThetaInteractiveMarkerWidget.h"
+//#include "TransformInteractiveMarkerWidget.h"
+//#include "VisualWidget.h"
+//#include "XYThetaInteractiveMarkerWidget.h"
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
@@ -113,16 +113,16 @@ double getTimeout()
 struct PanelImpl
 {
   PanelImpl()
-  : nh_(),
-    int_server_(std::make_shared<interactive_markers::InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers"))
+  /* : nh_() ,
+    int_server_(std::make_shared<interactive_markers::InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers")) */
   {
-    marker_array_pub_ =
-        mc_rtc::ROSBridge::get_node_handle()->advertise<visualization_msgs::MarkerArray>("/mc_rtc_rviz", 0);
+    // marker_array_pub_ =
+    //     mc_rtc::ROSBridge::get_node_handle()->advertise<visualization_msgs::MarkerArray>("/mc_rtc_rviz", 0);
   }
-  ros::NodeHandle nh_;
-  std::shared_ptr<interactive_markers::InteractiveMarkerServer> int_server_;
-  visualization_msgs::MarkerArray marker_array_;
-  ros::Publisher marker_array_pub_;
+  // ros::NodeHandle nh_;
+  // std::shared_ptr<interactive_markers::InteractiveMarkerServer> int_server_;
+  // visualization_msgs::MarkerArray marker_array_;
+  // ros::Publisher marker_array_pub_;
 };
 
 Panel::Panel(QWidget * parent)
@@ -271,10 +271,10 @@ void Panel::got_stop()
 {
   tree_.clean();
   this->clean();
-  impl_->int_server_->applyChanges();
-  impl_->marker_array_pub_.publish(impl_->marker_array_);
-  impl_->marker_array_.markers.clear();
-  if(ros::ok()) { ros::spinOnce(); }
+  // impl_->int_server_->applyChanges();
+  // impl_->marker_array_pub_.publish(impl_->marker_array_);
+  // impl_->marker_array_.markers.clear();
+  // if(ros::ok()) { ros::spinOnce(); }
 }
 
 Panel::~Panel()
@@ -744,23 +744,23 @@ void Panel::got_point3d(const WidgetId & id,
                         const Eigen::Vector3d & pos,
                         const mc_rtc::gui::PointConfig & config)
 {
-  auto label = latestWidget_;
-  auto & w = get_widget<Point3DInteractiveMarkerWidget>(id, requestId, impl_->int_server_, config, !ro, label);
-  w.update(pos);
+  // auto label = latestWidget_;
+  // auto & w = get_widget<Point3DInteractiveMarkerWidget>(id, requestId, impl_->int_server_, config, !ro, label);
+  // w.update(pos);
 }
 
 void Panel::got_rotation(const WidgetId & id, const WidgetId & requestId, bool ro, const sva::PTransformd & pos)
 {
-  auto label = latestWidget_;
-  auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, false, label);
-  w.update(pos);
+  // auto label = latestWidget_;
+  // auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, false, label);
+  // w.update(pos);
 }
 
 void Panel::got_transform(const WidgetId & id, const WidgetId & requestId, bool ro, const sva::PTransformd & pos)
 {
-  auto label = latestWidget_;
-  auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, !ro, label);
-  w.update(pos);
+  // auto label = latestWidget_;
+  // auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, !ro, label);
+  // w.update(pos);
 }
 
 void Panel::got_xytheta(const WidgetId & id,
@@ -769,46 +769,46 @@ void Panel::got_xytheta(const WidgetId & id,
                         const Eigen::Vector3d & vec,
                         double altitude)
 {
-  auto label = latestWidget_;
-  auto & w = get_widget<XYThetaInteractiveMarkerWidget>(id, requestId, impl_->int_server_, sva::PTransformd::Identity(),
-                                                        !ro, !ro, label);
-  w.update(vec, altitude);
+  // auto label = latestWidget_;
+  // auto & w = get_widget<XYThetaInteractiveMarkerWidget>(id, requestId, impl_->int_server_, sva::PTransformd::Identity(),
+  //                                                       !ro, !ro, label);
+  // w.update(vec, altitude);
 }
 
 void Panel::got_trajectory(const WidgetId & id,
                            const std::vector<Eigen::Vector3d> & points,
                            const mc_rtc::gui::LineConfig & config)
 {
-  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  w.update(points, config);
+  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  // w.update(points, config);
 }
 
 void Panel::got_trajectory(const WidgetId & id,
                            const std::vector<sva::PTransformd> & points,
                            const mc_rtc::gui::LineConfig & config)
 {
-  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  w.update(points, config);
+  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  // w.update(points, config);
 }
 
 void Panel::got_trajectory(const WidgetId & id, const Eigen::Vector3d & point, const mc_rtc::gui::LineConfig & config)
 {
-  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  w.update(point, config);
+  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  // w.update(point, config);
 }
 
 void Panel::got_trajectory(const WidgetId & id, const sva::PTransformd & point, const mc_rtc::gui::LineConfig & config)
 {
-  auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
-  w.update(point, config);
+  // auto & w = get_widget<DisplayTrajectoryWidget>(id, impl_->marker_array_);
+  // w.update(point, config);
 }
 
 void Panel::got_polygon(const WidgetId & id,
                         const std::vector<std::vector<Eigen::Vector3d>> & polygons,
                         const mc_rtc::gui::LineConfig & c)
 {
-  auto & w = get_widget<PolygonMarkerWidget>(id, impl_->marker_array_);
-  w.update(polygons, c);
+  // auto & w = get_widget<PolygonMarkerWidget>(id, impl_->marker_array_);
+  // w.update(polygons, c);
 }
 
 void Panel::got_polyhedron(const WidgetId & id,
@@ -816,8 +816,8 @@ void Panel::got_polyhedron(const WidgetId & id,
                            const std::vector<std::array<mc_rtc::gui::Color, 3>> & colors,
                            const mc_rtc::gui::PolyhedronConfig & c)
 {
-  auto & w = get_widget<PolyhedronMarkerWidget>(id, impl_->marker_array_, c);
-  w.update(triangles, colors);
+  // auto & w = get_widget<PolyhedronMarkerWidget>(id, impl_->marker_array_, c);
+  // w.update(triangles, colors);
 }
 
 void Panel::got_force(const WidgetId & id,
@@ -827,10 +827,10 @@ void Panel::got_force(const WidgetId & id,
                       const mc_rtc::gui::ForceConfig & forceConfig,
                       bool ro)
 {
-  auto label = latestWidget_;
-  auto & w = get_widget<ForceInteractiveMarkerWidget>(id, requestId, impl_->int_server_, surface, forcep, forceConfig,
-                                                      ro, label);
-  w.update(surface, forcep, forceConfig);
+  // auto label = latestWidget_;
+  // auto & w = get_widget<ForceInteractiveMarkerWidget>(id, requestId, impl_->int_server_, surface, forcep, forceConfig,
+  //                                                     ro, label);
+  // w.update(surface, forcep, forceConfig);
 }
 
 void Panel::got_arrow(const WidgetId & id,
@@ -840,15 +840,15 @@ void Panel::got_arrow(const WidgetId & id,
                       const mc_rtc::gui::ArrowConfig & config,
                       bool ro)
 {
-  auto label = latestWidget_;
-  auto & w =
-      get_widget<ArrowInteractiveMarkerWidget>(id, requestId, impl_->int_server_, start, end, config, !ro, !ro, label);
-  w.update(start, end, config);
+  // auto label = latestWidget_;
+  // auto & w =
+  //     get_widget<ArrowInteractiveMarkerWidget>(id, requestId, impl_->int_server_, start, end, config, !ro, !ro, label);
+  // w.update(start, end, config);
 }
 
 void Panel::got_schema(const WidgetId & id, const std::string & schema)
 {
-  get_widget<SchemaWidget>(id, schema, data_);
+  // get_widget<SchemaWidget>(id, schema, data_);
 }
 
 void Panel::got_table_start(const WidgetId & id, const std::vector<std::string> & header)
@@ -886,15 +886,15 @@ void Panel::got_robot(const WidgetId & id,
 
 void Panel::got_visual(const WidgetId & id, const rbd::parsers::Visual & visual, const sva::PTransformd & pose)
 {
-  auto & w = get_widget<VisualWidget>(id, impl_->marker_array_);
-  w.update(visual, pose);
+  // auto & w = get_widget<VisualWidget>(id, impl_->marker_array_);
+  // w.update(visual, pose);
 }
 
 void Panel::got_form(const WidgetId & id)
 {
-  auto & form = get_widget<FormWidget>(id);
-  activeForm_ = form.container();
-  form.update();
+  // auto & form = get_widget<FormWidget>(id);
+  // activeForm_ = form.container();
+  // form.update();
 }
 
 void Panel::got_form_checkbox(const WidgetId & formId,
@@ -903,7 +903,7 @@ void Panel::got_form_checkbox(const WidgetId & formId,
                               bool def,
                               bool def_from_user)
 {
-  activeForm_->element<form::Checkbox>(name, required, def, def_from_user);
+  // activeForm_->element<form::Checkbox>(name, required, def, def_from_user);
 }
 
 void Panel::got_form_integer_input(const WidgetId & formId,
@@ -912,7 +912,7 @@ void Panel::got_form_integer_input(const WidgetId & formId,
                                    int def,
                                    bool def_from_user)
 {
-  activeForm_->element<form::IntegerInput>(name, required, def, def_from_user);
+  // activeForm_->element<form::IntegerInput>(name, required, def, def_from_user);
 }
 
 void Panel::got_form_number_input(const WidgetId & formId,
@@ -921,7 +921,7 @@ void Panel::got_form_number_input(const WidgetId & formId,
                                   double def,
                                   bool def_from_user)
 {
-  activeForm_->element<form::NumberInput>(name, required, def, def_from_user);
+  // activeForm_->element<form::NumberInput>(name, required, def, def_from_user);
 }
 
 void Panel::got_form_string_input(const WidgetId & formId,
@@ -930,7 +930,7 @@ void Panel::got_form_string_input(const WidgetId & formId,
                                   const std::string & def,
                                   bool def_from_user)
 {
-  activeForm_->element<form::StringInput>(name, required, def, def_from_user);
+  // activeForm_->element<form::StringInput>(name, required, def, def_from_user);
 }
 
 void Panel::got_form_array_input(const WidgetId & formId,
@@ -940,7 +940,7 @@ void Panel::got_form_array_input(const WidgetId & formId,
                                  bool fixed_size,
                                  bool def_from_user)
 {
-  activeForm_->element<form::NumberArrayInput>(name, required, def, fixed_size, def_from_user);
+  // activeForm_->element<form::NumberArrayInput>(name, required, def, fixed_size, def_from_user);
 }
 
 void Panel::got_form_combo_input(const WidgetId & formId,
@@ -950,7 +950,7 @@ void Panel::got_form_combo_input(const WidgetId & formId,
                                  bool send_index,
                                  int def)
 {
-  activeForm_->element<form::ComboInput>(name, required, values, send_index, def);
+  // activeForm_->element<form::ComboInput>(name, required, values, send_index, def);
 }
 
 void Panel::got_form_data_combo_input(const WidgetId & formId,
@@ -959,7 +959,7 @@ void Panel::got_form_data_combo_input(const WidgetId & formId,
                                       const std::vector<std::string> & ref,
                                       bool send_index)
 {
-  activeForm_->element<form::DataComboInput>(name, required, data_, ref, send_index);
+  // activeForm_->element<form::DataComboInput>(name, required, data_, ref, send_index);
 }
 
 void Panel::got_form_point3d_input(const WidgetId & formId,
@@ -969,8 +969,8 @@ void Panel::got_form_point3d_input(const WidgetId & formId,
                                    bool default_from_user,
                                    bool interactive)
 {
-  activeForm_->element<form::Point3DInput>(name, required, default_, default_from_user, interactive,
-                                           impl_->int_server_);
+  // activeForm_->element<form::Point3DInput>(name, required, default_, default_from_user, interactive,
+  //                                          impl_->int_server_);
 }
 
 void Panel::got_form_rotation_input(const WidgetId & formId,
@@ -980,8 +980,8 @@ void Panel::got_form_rotation_input(const WidgetId & formId,
                                     bool default_from_user,
                                     bool interactive)
 {
-  activeForm_->element<form::RotationInput>(name, required, default_, default_from_user, interactive,
-                                            impl_->int_server_);
+  // activeForm_->element<form::RotationInput>(name, required, default_, default_from_user, interactive,
+  //                                           impl_->int_server_);
 }
 
 void Panel::got_form_transform_input(const WidgetId & formId,
@@ -991,48 +991,48 @@ void Panel::got_form_transform_input(const WidgetId & formId,
                                      bool default_from_user,
                                      bool interactive)
 {
-  activeForm_->element<form::TransformInput>(name, required, default_, default_from_user, interactive,
-                                             impl_->int_server_);
+  // activeForm_->element<form::TransformInput>(name, required, default_, default_from_user, interactive,
+  //                                            impl_->int_server_);
 }
 
 void Panel::got_start_form_object_input(const std::string & name, bool required)
 {
-  activeForm_ = activeForm_->element<form::Object>(name, required, activeForm_)->container();
+  // activeForm_ = activeForm_->element<form::Object>(name, required, activeForm_)->container();
 }
 
 void Panel::got_end_form_object_input()
 {
-  activeForm_->update();
-  activeForm_ = activeForm_->parentForm();
+  // activeForm_->update();
+  // activeForm_ = activeForm_->parentForm();
 }
 
 void Panel::got_start_form_generic_array_input(const std::string & name,
                                                bool required,
                                                std::optional<std::vector<mc_rtc::Configuration>> data)
 {
-  auto array = activeForm_->element<form::GenericArray>(name, required, data, activeForm_);
-  activeForm_ = array->container();
+  // auto array = activeForm_->element<form::GenericArray>(name, required, data, activeForm_);
+  // activeForm_ = array->container();
 }
 
 void Panel::got_end_form_generic_array_input()
 {
-  activeForm_->update();
-  activeForm_ = activeForm_->parentForm();
+  // activeForm_->update();
+  // activeForm_ = activeForm_->parentForm();
 }
 
 void Panel::got_start_form_one_of_input(const std::string & name,
                                         bool required,
                                         const std::optional<std::pair<size_t, mc_rtc::Configuration>> & data)
 {
-  auto oneof = activeForm_->element<form::OneOf>(name, required, data, activeForm_);
-  oneof->update();
-  activeForm_ = oneof->container();
+  // auto oneof = activeForm_->element<form::OneOf>(name, required, data, activeForm_);
+  // oneof->update();
+  // activeForm_ = oneof->container();
 }
 
 void Panel::got_end_form_one_of_input()
 {
-  activeForm_->update();
-  activeForm_ = activeForm_->parentForm();
+  // activeForm_->update();
+  // activeForm_ = activeForm_->parentForm();
 }
 
 void Panel::got_start_plot(uint64_t id, const std::string & title)
