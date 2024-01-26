@@ -9,8 +9,6 @@
 
 #include <mc_rtc/gui/types.h>
 
-#include <visualization_msgs/MarkerArray.h>
-
 namespace mc_rtc_rviz
 {
 
@@ -18,7 +16,7 @@ struct PolygonMarkerWidget : public ClientWidget
 {
   Q_OBJECT
 public:
-  PolygonMarkerWidget(const ClientWidgetParam & params, visualization_msgs::MarkerArray & markers);
+  PolygonMarkerWidget(const ClientWidgetParam & params, MarkerArray & markers);
 
   void update(const std::vector<std::vector<Eigen::Vector3d>> & polygons, const mc_rtc::gui::LineConfig & c);
 
@@ -32,7 +30,7 @@ private:
   void clear();
 
 private:
-  visualization_msgs::MarkerArray & markers_;
+  MarkerArray & markers_;
   size_t prevPolygonNum_ = 0;
   size_t currPolygonNum_ = 0;
   bool visible_;

@@ -22,7 +22,7 @@
 #include "NumberSliderWidget.h"
 #include "PlotTabWidget.h"
 #include "Point3DInteractiveMarkerWidget.h"
-//#include "PolygonMarkerWidget.h"
+#include "PolygonMarkerWidget.h"
 //#include "PolyhedronMarkerWidget.h"
 // #include "SchemaWidget.h"
 #include "TableWidget.h"
@@ -827,8 +827,8 @@ void Panel::got_polygon(const WidgetId & id,
                         const std::vector<std::vector<Eigen::Vector3d>> & polygons,
                         const mc_rtc::gui::LineConfig & c)
 {
-  // auto & w = get_widget<PolygonMarkerWidget>(id, impl_->marker_array_);
-  // w.update(polygons, c);
+  auto & w = get_widget<PolygonMarkerWidget>(id, impl_->marker_array_);
+  w.update(polygons, c);
 }
 
 void Panel::got_polyhedron(const WidgetId & id,
