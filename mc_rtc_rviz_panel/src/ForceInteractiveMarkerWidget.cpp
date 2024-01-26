@@ -6,7 +6,7 @@ namespace mc_rtc_rviz
 ForceInteractiveMarkerWidget::ForceInteractiveMarkerWidget(
     const ClientWidgetParam & params,
     const WidgetId & requestId,
-    std::shared_ptr<interactive_markers::InteractiveMarkerServer> & server,
+    std::shared_ptr<InteractiveMarkerServer> & server,
     const sva::PTransformd & surface,
     const sva::ForceVecd & force,
     const mc_rtc::gui::ForceConfig & config,
@@ -38,7 +38,7 @@ void ForceInteractiveMarkerWidget::update(const sva::PTransformd & surface,
 }
 
 void ForceInteractiveMarkerWidget::handleEndRequest(
-    const visualization_msgs::InteractiveMarkerFeedbackConstPtr & feedback)
+    const InteractiveMarkerFeedbackConstPtr & feedback)
 {
   Eigen::Vector3d end =
       Eigen::Vector3d{feedback->pose.position.x, feedback->pose.position.y, feedback->pose.position.z};

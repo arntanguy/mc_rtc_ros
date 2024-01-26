@@ -13,7 +13,7 @@
 #include "ComboInputWidget.h"
 #include "ConnectionDialog.h"
 #include "DisplayTrajectoryWidget.h"
-//#include "ForceInteractiveMarkerWidget.h"
+#include "ForceInteractiveMarkerWidget.h"
 #include "FormElement.h"
 #include "FormWidget.h"
 #include "GenericInputWidget.h"
@@ -847,10 +847,10 @@ void Panel::got_force(const WidgetId & id,
                       const mc_rtc::gui::ForceConfig & forceConfig,
                       bool ro)
 {
-  // auto label = latestWidget_;
-  // auto & w = get_widget<ForceInteractiveMarkerWidget>(id, requestId, impl_->int_server_, surface, forcep, forceConfig,
-  //                                                     ro, label);
-  // w.update(surface, forcep, forceConfig);
+  auto label = latestWidget_;
+  auto & w = get_widget<ForceInteractiveMarkerWidget>(id, requestId, impl_->int_server_, surface, forcep, forceConfig,
+                                                      ro, label);
+  w.update(surface, forcep, forceConfig);
 }
 
 void Panel::got_arrow(const WidgetId & id,

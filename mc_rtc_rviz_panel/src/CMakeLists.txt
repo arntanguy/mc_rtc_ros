@@ -22,8 +22,8 @@ set(MOC_HEADERS
     # ROS WIDGETS
     InteractiveMarkerWidget.h
     ArrowInteractiveMarkerWidget.h
-    # ForceInteractiveMarkerWidget.h
-    Point3DInteractiveMarkerWidget.h # XXX Do we need it in MOC headers?
+    ForceInteractiveMarkerWidget.h
+    Point3DInteractiveMarkerWidget.h
     TransformInteractiveMarkerWidget.h
     VisualWidget.h
     XYThetaInteractiveMarkerWidget.h
@@ -95,7 +95,7 @@ set(SOURCE_FILES
     TableWidget.cpp
     InteractiveMarkerWidget.cpp
     ArrowInteractiveMarkerWidget.cpp
-    # ForceInteractiveMarkerWidget.cpp
+    ForceInteractiveMarkerWidget.cpp
     Point3DInteractiveMarkerWidget.cpp
     TransformInteractiveMarkerWidget.cpp
     VisualWidget.cpp

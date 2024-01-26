@@ -109,7 +109,8 @@ struct SharedMarker
 
   InteractiveMarker & marker() { return marker_; }
 
-  void applyChanges() { server_->applyChanges(); }
+  void applyChanges() {
+    server_->applyChanges(); }
 
 private:
   std::shared_ptr<InteractiveMarkerServer> server_;

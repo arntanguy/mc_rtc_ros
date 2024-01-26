@@ -255,7 +255,7 @@ Marker getPointMarker(const Eigen::Vector3d & pos,
 }
 
 SharedMarker::SharedMarker(std::shared_ptr<InteractiveMarkerServer> server,
-                           const std::string & /*name*/,
+                           const std::string & /* name */,
                            const InteractiveMarker & marker,
                            InteractiveMarkerServer::FeedbackCallback callback)
 : server_(server), marker_(marker), callback_(callback)
