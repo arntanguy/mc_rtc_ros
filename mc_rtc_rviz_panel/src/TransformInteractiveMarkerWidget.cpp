@@ -6,7 +6,7 @@ namespace mc_rtc_rviz
 TransformInteractiveMarkerWidget::TransformInteractiveMarkerWidget(
     const ClientWidgetParam & params,
     const WidgetId & requestId,
-    std::shared_ptr<interactive_markers::InteractiveMarkerServer> & server,
+    std::shared_ptr<InteractiveMarkerServer> & server,
     bool control_orientation,
     bool control_position,
     ClientWidget * label)
@@ -23,8 +23,8 @@ TransformInteractiveMarkerWidget::TransformInteractiveMarkerWidget(
 TransformInteractiveMarkerWidget::TransformInteractiveMarkerWidget(
     const ClientWidgetParam & params,
     const WidgetId & requestId,
-    std::shared_ptr<interactive_markers::InteractiveMarkerServer> & server,
-    const vm::InteractiveMarker & marker,
+    std::shared_ptr<InteractiveMarkerServer> & server,
+    const InteractiveMarker & marker,
     bool control_orientation,
     bool control_position,
     ClientWidget * label)
@@ -34,7 +34,7 @@ TransformInteractiveMarkerWidget::TransformInteractiveMarkerWidget(
 }
 
 void TransformInteractiveMarkerWidget::handleRequest(
-    const visualization_msgs::InteractiveMarkerFeedbackConstPtr & feedback)
+    const InteractiveMarkerFeedbackConstPtr & feedback)
 {
   if(!control_position_ && !control_orientation_) { return; }
   if(control_position_ && !control_orientation_)

@@ -24,7 +24,7 @@ set(MOC_HEADERS
     ArrowInteractiveMarkerWidget.h
     # ForceInteractiveMarkerWidget.h
     # Point3DInteractiveMarkerWidget.h
-    # TransformInteractiveMarkerWidget.h
+    TransformInteractiveMarkerWidget.h
     VisualWidget.h
     # XYThetaInteractiveMarkerWidget.h
     DisplayTrajectoryWidget.h
@@ -97,7 +97,7 @@ set(SOURCE_FILES
     ArrowInteractiveMarkerWidget.cpp
     # ForceInteractiveMarkerWidget.cpp
     # Point3DInteractiveMarkerWidget.cpp
-    # TransformInteractiveMarkerWidget.cpp
+    TransformInteractiveMarkerWidget.cpp
     VisualWidget.cpp
     # XYThetaInteractiveMarkerWidget.cpp
     DisplayTrajectoryWidget.cpp

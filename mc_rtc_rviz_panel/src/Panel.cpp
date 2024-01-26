@@ -21,12 +21,12 @@
 #include "LabelWidget.h"
 #include "NumberSliderWidget.h"
 #include "PlotTabWidget.h"
-//#include "Point3DInteractiveMarkerWidget.h"
+// #include "Point3DInteractiveMarkerWidget.h"
 //#include "PolygonMarkerWidget.h"
 //#include "PolyhedronMarkerWidget.h"
 // #include "SchemaWidget.h"
 #include "TableWidget.h"
-//#include "TransformInteractiveMarkerWidget.h"
+#include "TransformInteractiveMarkerWidget.h"
 #include "VisualWidget.h"
 //#include "XYThetaInteractiveMarkerWidget.h"
 
@@ -772,16 +772,16 @@ void Panel::got_point3d(const WidgetId & id,
 
 void Panel::got_rotation(const WidgetId & id, const WidgetId & requestId, bool ro, const sva::PTransformd & pos)
 {
-  // auto label = latestWidget_;
-  // auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, false, label);
-  // w.update(pos);
+  auto label = latestWidget_;
+  auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, false, label);
+  w.update(pos);
 }
 
 void Panel::got_transform(const WidgetId & id, const WidgetId & requestId, bool ro, const sva::PTransformd & pos)
 {
-  // auto label = latestWidget_;
-  // auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, !ro, label);
-  // w.update(pos);
+  auto label = latestWidget_;
+  auto & w = get_widget<TransformInteractiveMarkerWidget>(id, requestId, impl_->int_server_, !ro, !ro, label);
+  w.update(pos);
 }
 
 void Panel::got_xytheta(const WidgetId & id,
