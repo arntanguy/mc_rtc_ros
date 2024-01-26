@@ -77,10 +77,11 @@ void ArrowInteractiveMarkerWidget::update(const Eigen::Vector3d & start,
   arrow_points_.tail<3>() = end;
   if(visible())
   {
-    start_marker_.update(start);
-    end_marker_.update(end);
-    arrow_marker_.marker(makeInteractiveMarker(id2name(request_id_) + "_arrow", makeArrowMarker(start, end, c)));
-    arrow_marker_.applyChanges();
+    // start_marker_.update(start);
+    // end_marker_.update(end);
+    //   FIXME this does not work as expected in ROS2
+    // arrow_marker_.marker(makeInteractiveMarker(id2name(request_id_) + "_arrow", makeArrowMarker(start, end, c)));
+    // arrow_marker_.applyChanges();
   }
 }
 

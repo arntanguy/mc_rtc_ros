@@ -7,7 +7,7 @@
 
 #include "ArrayInputWidget.h"
 #include "ArrayLabelWidget.h"
-// #include "ArrowInteractiveMarkerWidget.h"
+#include "ArrowInteractiveMarkerWidget.h"
 #include "ButtonWidget.h"
 #include "CheckboxWidget.h"
 #include "ComboInputWidget.h"
@@ -860,10 +860,10 @@ void Panel::got_arrow(const WidgetId & id,
                       const mc_rtc::gui::ArrowConfig & config,
                       bool ro)
 {
-  // auto label = latestWidget_;
-  // auto & w =
-  //     get_widget<ArrowInteractiveMarkerWidget>(id, requestId, impl_->int_server_, start, end, config, !ro, !ro, label);
-  // w.update(start, end, config);
+  auto label = latestWidget_;
+  auto & w =
+      get_widget<ArrowInteractiveMarkerWidget>(id, requestId, impl_->int_server_, start, end, config, !ro, !ro, label);
+  w.update(start, end, config);
 }
 
 void Panel::got_schema(const WidgetId & id, const std::string & schema)
