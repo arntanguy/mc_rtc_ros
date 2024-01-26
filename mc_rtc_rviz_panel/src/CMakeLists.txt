@@ -23,7 +23,7 @@ set(MOC_HEADERS
     InteractiveMarkerWidget.h
     ArrowInteractiveMarkerWidget.h
     # ForceInteractiveMarkerWidget.h
-    # Point3DInteractiveMarkerWidget.h
+    Point3DInteractiveMarkerWidget.h # XXX Do we need it in MOC headers?
     TransformInteractiveMarkerWidget.h
     VisualWidget.h
     # XYThetaInteractiveMarkerWidget.h
@@ -96,7 +96,7 @@ set(SOURCE_FILES
     InteractiveMarkerWidget.cpp
     ArrowInteractiveMarkerWidget.cpp
     # ForceInteractiveMarkerWidget.cpp
-    # Point3DInteractiveMarkerWidget.cpp
+    Point3DInteractiveMarkerWidget.cpp
     TransformInteractiveMarkerWidget.cpp
     VisualWidget.cpp
     # XYThetaInteractiveMarkerWidget.cpp

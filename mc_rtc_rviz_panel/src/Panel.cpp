@@ -21,7 +21,7 @@
 #include "LabelWidget.h"
 #include "NumberSliderWidget.h"
 #include "PlotTabWidget.h"
-// #include "Point3DInteractiveMarkerWidget.h"
+#include "Point3DInteractiveMarkerWidget.h"
 //#include "PolygonMarkerWidget.h"
 //#include "PolyhedronMarkerWidget.h"
 // #include "SchemaWidget.h"
@@ -765,9 +765,9 @@ void Panel::got_point3d(const WidgetId & id,
                         const Eigen::Vector3d & pos,
                         const mc_rtc::gui::PointConfig & config)
 {
-  // auto label = latestWidget_;
-  // auto & w = get_widget<Point3DInteractiveMarkerWidget>(id, requestId, impl_->int_server_, config, !ro, label);
-  // w.update(pos);
+  auto label = latestWidget_;
+  auto & w = get_widget<Point3DInteractiveMarkerWidget>(id, requestId, impl_->int_server_, config, !ro, label);
+  w.update(pos);
 }
 
 void Panel::got_rotation(const WidgetId & id, const WidgetId & requestId, bool ro, const sva::PTransformd & pos)
