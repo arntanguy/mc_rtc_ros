@@ -30,6 +30,7 @@ using MarkerArray = visualization_msgs::msg::MarkerArray;
 using Point = geometry_msgs::msg::Point;
 using InteractiveMarker = visualization_msgs::msg::InteractiveMarker;
 using InteractiveMarkerServer = interactive_markers::InteractiveMarkerServer;
+using InteractiveMarkerControl = visualization_msgs::msg::InteractiveMarkerControl;
 using InteractiveMarkerFeedbackConstPtr =
   visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr;
 using Pose = geometry_msgs::msg::Pose;
@@ -38,7 +39,8 @@ using Marker = visualization_msgs::Marker;
 using MarkerArray = visualization_msgs::MarkerArray;
 using Point = geometry_msgs::Point;
 using InteractiveMarker = visualization_msgs::InteractiveMarker;
-using InteraInteractiveMarkerServerctiveMarkerServer = interactive_markers::InteractiveMarkerServer;
+using InteraInteractiveMarkerServer = interactive_markers::InteractiveMarkerServer;
+using InteraInteractiveMarkerControl = visualization_msg::InteractiveMarkerControl;
 using InteractiveMarkerFeedbackConstPtr = visualization_msgs::InteractiveMarkerFeedbackConstPtr;
 using Pose = geometry_msgs::Pose;
 #endif

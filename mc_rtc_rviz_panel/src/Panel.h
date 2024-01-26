@@ -14,7 +14,7 @@
 
 #endif
 
-#include <mc_rtc/ros.h>
+#include <mc_rtc_ros/ros.h>
 // #include <visualization_msgs/MarkerArray.h>
 
 // #include <interactive_markers/interactive_marker_server.h>

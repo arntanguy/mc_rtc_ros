@@ -21,7 +21,7 @@ set(MOC_HEADERS
     TableWidget.h
     # ROS WIDGETS
     InteractiveMarkerWidget.h
-    # ArrowInteractiveMarkerWidget.h
+    ArrowInteractiveMarkerWidget.h
     # ForceInteractiveMarkerWidget.h
     # Point3DInteractiveMarkerWidget.h
     # TransformInteractiveMarkerWidget.h
@@ -68,7 +68,7 @@ set(HEADER_FILES
     FormElementContainer.h
     LabelWidget.h
     Schema.h
-    #utils.h
+    utils.h
     )
 
 set(SOURCE_FILES
@@ -94,7 +94,7 @@ set(SOURCE_FILES
     # SchemaWidget.cpp
     TableWidget.cpp
     InteractiveMarkerWidget.cpp
-    # ArrowInteractiveMarkerWidget.cpp
+    ArrowInteractiveMarkerWidget.cpp
     # ForceInteractiveMarkerWidget.cpp
     # Point3DInteractiveMarkerWidget.cpp
     # TransformInteractiveMarkerWidget.cpp
@@ -103,7 +103,7 @@ set(SOURCE_FILES
     DisplayTrajectoryWidget.cpp
     # PolygonMarkerWidget.cpp
     # PolyhedronMarkerWidget.cpp
-    # utils.cpp
+    utils.cpp
     plugin.cpp
     ${MOC_FILES}
     ${QRC_FILES})

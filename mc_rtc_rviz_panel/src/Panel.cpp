@@ -3,11 +3,11 @@
  */
 
 #include "Panel.h"
-#include <mc_rtc/ros.h>
+#include <mc_rtc_ros/ros.h>
 
 #include "ArrayInputWidget.h"
 #include "ArrayLabelWidget.h"
-//#include "ArrowInteractiveMarkerWidget.h"
+// #include "ArrowInteractiveMarkerWidget.h"
 #include "ButtonWidget.h"
 #include "CheckboxWidget.h"
 #include "ComboInputWidget.h"
@@ -114,13 +114,15 @@ double getTimeout()
 struct PanelImpl
 {
   PanelImpl()
-  : nh_(mc_rtc::ROSBridge::get_node_handle()) /* ,
-    int_server_(std::make_shared<interactive_markers::InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers")) */
+  : nh_(mc_rtc::ROSBridge::get_node_handle())
   {
 #ifdef MC_RTC_ROS_IS_ROS2
     marker_array_pub_ = nh_->create_publisher<MarkerArray>("/mc_rtc_rviz", 0);
+    int_server_ = std::make_shared<InteractiveMarkerServer>(
+        "mc_rtc_rviz_interactive_markers", nh_);
 #else
     marker_array_pub_ = nh_.advertise<MarkerArray>("/mc_rtc_rviz", 0);
+    int_server_ = std::make_shared<InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers"));
 #endif
   }
 #ifdef MC_RTC_ROS_IS_ROS2
@@ -130,7 +132,7 @@ struct PanelImpl
   ros::NodeHandle nh_;
   ros::Publisher marker_array_pub_;
 #endif
-  // std::shared_ptr<interactive_markers::InteractiveMarkerServer> int_server_;
+  std::shared_ptr<InteractiveMarkerServer> int_server_;
   MarkerArray marker_array_;
 };
 
@@ -280,15 +282,17 @@ void Panel::got_stop()
 {
   tree_.clean();
   this->clean();
+
+  impl_->int_server_->applyChanges();
 #ifdef MC_RTC_ROS_IS_ROS2
+  impl_->marker_array_.markers.clear(); // Needed in ROS1 but does not work for ROS2. Seems to work without it
   impl_->marker_array_pub_->publish(impl_->marker_array_);
   if(rclcpp::ok())
   {
     rclcpp::spin_some(impl_->nh_);
   }
 #else
-  // impl_->int_server_->applyChanges();
-  // impl_->marker_array_.markers.clear();
+  impl_->marker_array_.markers.clear();
   impl_->marker_array_pub_.publish(impl_->marker_array_);
   if(ros::ok()) { ros::spinOnce(); }
 #endif
