@@ -285,14 +285,13 @@ void Panel::got_stop()
 
   impl_->int_server_->applyChanges();
 #ifdef MC_RTC_ROS_IS_ROS2
-  impl_->marker_array_.markers.clear(); // Needed in ROS1 but does not work for ROS2. Seems to work without it
   impl_->marker_array_pub_->publish(impl_->marker_array_);
   if(rclcpp::ok())
   {
     rclcpp::spin_some(impl_->nh_);
   }
 #else
-  impl_->marker_array_.markers.clear();
+  impl_->marker_array_.markers.clear(); // Needed in ROS1 but does not work for ROS2. Seems to work without it
   impl_->marker_array_pub_.publish(impl_->marker_array_);
   if(ros::ok()) { ros::spinOnce(); }
 #endif
