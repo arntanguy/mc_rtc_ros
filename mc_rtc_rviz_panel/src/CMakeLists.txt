@@ -10,8 +10,8 @@ set(MOC_HEADERS
     CheckboxWidget.h
     ComboInputWidget.h
     ConnectionDialog.h
-    # FormElement.h
-    # FormWidget.h
+    FormElement.h
+    FormWidget.h
     GenericInputWidget.h
     NumberSliderWidget.h
     PlotWidget.h
@@ -81,9 +81,9 @@ set(SOURCE_FILES
     ComboInputWidget.cpp
     ConnectionConfiguration.cpp
     ConnectionDialog.cpp
-    # FormElement.cpp
-    # FormElementContainer.cpp
-    # FormWidget.cpp
+    FormElement.cpp
+    FormElementContainer.cpp
+    FormWidget.cpp
     GenericInputWidget.cpp
     LabelWidget.cpp
     NumberSliderWidget.cpp
