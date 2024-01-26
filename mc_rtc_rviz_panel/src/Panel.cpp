@@ -23,7 +23,7 @@
 #include "PlotTabWidget.h"
 #include "Point3DInteractiveMarkerWidget.h"
 #include "PolygonMarkerWidget.h"
-//#include "PolyhedronMarkerWidget.h"
+#include "PolyhedronMarkerWidget.h"
 // #include "SchemaWidget.h"
 #include "TableWidget.h"
 #include "TransformInteractiveMarkerWidget.h"
@@ -836,8 +836,8 @@ void Panel::got_polyhedron(const WidgetId & id,
                            const std::vector<std::array<mc_rtc::gui::Color, 3>> & colors,
                            const mc_rtc::gui::PolyhedronConfig & c)
 {
-  // auto & w = get_widget<PolyhedronMarkerWidget>(id, impl_->marker_array_, c);
-  // w.update(triangles, colors);
+  auto & w = get_widget<PolyhedronMarkerWidget>(id, impl_->marker_array_, c);
+  w.update(triangles, colors);
 }
 
 void Panel::got_force(const WidgetId & id,

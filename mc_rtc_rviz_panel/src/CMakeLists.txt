@@ -29,7 +29,7 @@ set(MOC_HEADERS
     XYThetaInteractiveMarkerWidget.h
     DisplayTrajectoryWidget.h
     PolygonMarkerWidget.h
-    # PolyhedronMarkerWidget.h
+    PolyhedronMarkerWidget.h
     plugin.h)
 
 if(NOT DEFINED ENV{ROS_DISTRO})
@@ -102,7 +102,7 @@ set(SOURCE_FILES
     XYThetaInteractiveMarkerWidget.cpp
     DisplayTrajectoryWidget.cpp
     PolygonMarkerWidget.cpp
-    # PolyhedronMarkerWidget.cpp
+    PolyhedronMarkerWidget.cpp
     utils.cpp
     plugin.cpp
     ${MOC_FILES}
