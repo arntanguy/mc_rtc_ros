@@ -24,7 +24,7 @@
 #include "Point3DInteractiveMarkerWidget.h"
 #include "PolygonMarkerWidget.h"
 #include "PolyhedronMarkerWidget.h"
-// #include "SchemaWidget.h"
+#include "SchemaWidget.h"
 #include "TableWidget.h"
 #include "TransformInteractiveMarkerWidget.h"
 #include "VisualWidget.h"
@@ -868,7 +868,7 @@ void Panel::got_arrow(const WidgetId & id,
 
 void Panel::got_schema(const WidgetId & id, const std::string & schema)
 {
-  // get_widget<SchemaWidget>(id, schema, data_);
+  get_widget<SchemaWidget>(id, schema, data_);
 }
 
 void Panel::got_table_start(const WidgetId & id, const std::vector<std::string> & header)

@@ -16,8 +16,8 @@ set(MOC_HEADERS
     NumberSliderWidget.h
     PlotWidget.h
     PlotTabWidget.h
-    # SchemaArrayInput.h
-    # SchemaWidget.h
+    SchemaArrayInput.h
+    SchemaWidget.h
     TableWidget.h
     # ROS WIDGETS
     InteractiveMarkerWidget.h
@@ -89,9 +89,9 @@ set(SOURCE_FILES
     NumberSliderWidget.cpp
     PlotWidget.cpp
     PlotTabWidget.cpp
-    # Schema.cpp
-    # SchemaArrayInput.cpp
-    # SchemaWidget.cpp
+    Schema.cpp
+    SchemaArrayInput.cpp
+    SchemaWidget.cpp
     TableWidget.cpp
     InteractiveMarkerWidget.cpp
     ArrowInteractiveMarkerWidget.cpp
