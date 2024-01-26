@@ -26,7 +26,7 @@ set(MOC_HEADERS
     Point3DInteractiveMarkerWidget.h # XXX Do we need it in MOC headers?
     TransformInteractiveMarkerWidget.h
     VisualWidget.h
-    # XYThetaInteractiveMarkerWidget.h
+    XYThetaInteractiveMarkerWidget.h
     DisplayTrajectoryWidget.h
     # PolygonMarkerWidget.h
     # PolyhedronMarkerWidget.h
@@ -99,7 +99,7 @@ set(SOURCE_FILES
     Point3DInteractiveMarkerWidget.cpp
     TransformInteractiveMarkerWidget.cpp
     VisualWidget.cpp
-    # XYThetaInteractiveMarkerWidget.cpp
+    XYThetaInteractiveMarkerWidget.cpp
     DisplayTrajectoryWidget.cpp
     # PolygonMarkerWidget.cpp
     # PolyhedronMarkerWidget.cpp

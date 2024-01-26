@@ -28,7 +28,7 @@
 #include "TableWidget.h"
 #include "TransformInteractiveMarkerWidget.h"
 #include "VisualWidget.h"
-//#include "XYThetaInteractiveMarkerWidget.h"
+#include "XYThetaInteractiveMarkerWidget.h"
 
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
@@ -790,10 +790,10 @@ void Panel::got_xytheta(const WidgetId & id,
                         const Eigen::Vector3d & vec,
                         double altitude)
 {
-  // auto label = latestWidget_;
-  // auto & w = get_widget<XYThetaInteractiveMarkerWidget>(id, requestId, impl_->int_server_, sva::PTransformd::Identity(),
-  //                                                       !ro, !ro, label);
-  // w.update(vec, altitude);
+  auto label = latestWidget_;
+  auto & w = get_widget<XYThetaInteractiveMarkerWidget>(id, requestId, impl_->int_server_, sva::PTransformd::Identity(),
+                                                        !ro, !ro, label);
+  w.update(vec, altitude);
 }
 
 void Panel::got_trajectory(const WidgetId & id,
