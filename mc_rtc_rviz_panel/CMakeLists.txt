@@ -37,3 +37,5 @@ find_package(interactive_markers REQUIRED)
 pluginlib_export_plugin_description_file(rviz_common rviz_plugin.xml)
 
 add_subdirectory(src)
+
+ament_package()

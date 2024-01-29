@@ -155,7 +155,7 @@ panel_link_libraries(visualization_msgs::visualization_msgs__rosidl_typesupport_
 panel_link_libraries(interactive_markers::interactive_markers)
 panel_link_libraries(tf2_ros::tf2_ros)
 
-add_library(${PROJECT_NAME} Panel.cpp ${HEADER_FILES} ${MOC_HEADERS}
+add_library(${PROJECT_NAME} SHARED Panel.cpp ${HEADER_FILES} ${MOC_HEADERS}
                             $<TARGET_OBJECTS:_gui_objects>)
 target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros mc_rtc::mc_control_client Qwt::Qwt)
 target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros)
@@ -166,6 +166,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_m
 target_link_libraries(${PROJECT_NAME} PUBLIC interactive_markers::interactive_markers)
 target_link_libraries(${PROJECT_NAME} PUBLIC tf2_ros::tf2_ros)
 
+# Causes the visibility macros to use dllexport rather than dllimport,
+# which is appropriate when building the dll but not consuming it.
+target_compile_definitions(${PROJECT_NAME} PRIVATE "RVIZ_DEFAULT_PLUGINS_BUILDING_LIBRARY")
+
 
 target_link_libraries(${PROJECT_NAME} PUBLIC)
 if(NOT ${FORCE_QT5} AND "${ROS_DISTRO}" STREQUAL "indigo")
@@ -173,6 +177,21 @@ if(NOT ${FORCE_QT5} AND "${ROS_DISTRO}" STREQUAL "indigo")
 else()
   target_link_libraries(${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Widgets)
 endif()
+
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+ament_export_libraries(
+  ${PROJECT_NAME}
+)
+ament_export_targets(
+  export_${PROJECT_NAME}
+)
 
 add_executable(mc_rtc_gui main.cpp)
 target_link_libraries(mc_rtc_gui PUBLIC ${PROJECT_NAME})
