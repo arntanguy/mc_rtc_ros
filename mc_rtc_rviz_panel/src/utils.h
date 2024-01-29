@@ -10,16 +10,15 @@
 #include <SpaceVecAlg/SpaceVecAlg>
 
 #ifdef MC_RTC_ROS_IS_ROS2
-#include <visualization_msgs/msg/interactive_marker.hpp>
-#include <visualization_msgs/msg/interactive_marker_control.hpp>
-#include <interactive_markers/interactive_marker_server.hpp>
-#include <visualization_msgs/msg/marker_array.hpp>
+#  include <visualization_msgs/msg/interactive_marker.hpp>
+#  include <visualization_msgs/msg/interactive_marker_control.hpp>
+#  include <visualization_msgs/msg/marker_array.hpp>
+#  include <interactive_markers/interactive_marker_server.hpp>
 #else
-#include <visualization_msgs/InteractiveMarker.h>
-#include <visualization_msgs/InteractiveMarkerControl.h>
-#include <interactive_markers/interactive_marker_server.h>
+#  include <visualization_msgs/InteractiveMarker.h>
+#  include <visualization_msgs/InteractiveMarkerControl.h>
+#  include <interactive_markers/interactive_marker_server.h>
 #endif
-
 
 namespace mc_rtc_rviz
 {
@@ -31,8 +30,7 @@ using Point = geometry_msgs::msg::Point;
 using InteractiveMarker = visualization_msgs::msg::InteractiveMarker;
 using InteractiveMarkerServer = interactive_markers::InteractiveMarkerServer;
 using InteractiveMarkerControl = visualization_msgs::msg::InteractiveMarkerControl;
-using InteractiveMarkerFeedbackConstPtr =
-  visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr;
+using InteractiveMarkerFeedbackConstPtr = visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr;
 using Pose = geometry_msgs::msg::Pose;
 #else
 using Marker = visualization_msgs::Marker;
@@ -44,7 +42,6 @@ using InteraInteractiveMarkerControl = visualization_msg::InteractiveMarkerContr
 using InteractiveMarkerFeedbackConstPtr = visualization_msgs::InteractiveMarkerFeedbackConstPtr;
 using Pose = geometry_msgs::Pose;
 #endif
-
 
 // Check if at least one values in x.array() is nan
 template<typename Derived>
@@ -65,25 +62,25 @@ Marker makeVisual(int t, double baseScale);
 InteractiveMarker makeInteractiveMarker(const std::string & name, const std::vector<Marker> & visual_markers);
 std::vector<Marker> makeAxisMarker(double baseScale);
 InteractiveMarker make6DMarker(const std::string & name,
-                                   const std::vector<Marker> & visual_markers,
-                                   bool control_position,
-                                   bool control_orientation,
-                                   bool move_x = true,
-                                   bool move_y = true,
-                                   bool move_z = true,
-                                   bool rotate_x = true,
-                                   bool rotate_y = true,
-                                   bool rotate_z = true);
+                               const std::vector<Marker> & visual_markers,
+                               bool control_position,
+                               bool control_orientation,
+                               bool move_x = true,
+                               bool move_y = true,
+                               bool move_z = true,
+                               bool rotate_x = true,
+                               bool rotate_y = true,
+                               bool rotate_z = true);
 InteractiveMarker make3DMarker(const std::string & name,
-                                   const std::vector<Marker> & visual_markers,
-                                   bool control_position,
-                                   bool move_x = true,
-                                   bool move_y = true,
-                                   bool move_z = true);
+                               const std::vector<Marker> & visual_markers,
+                               bool control_position,
+                               bool move_x = true,
+                               bool move_y = true,
+                               bool move_z = true);
 InteractiveMarker makeXYThetaMarker(const std::string & name, bool readonly = false);
 std::vector<Marker> makeArrowMarker(const Eigen::Vector3d & start,
-                                        const Eigen::Vector3d & end,
-                                        const mc_rtc::gui::ArrowConfig & c);
+                                    const Eigen::Vector3d & end,
+                                    const mc_rtc::gui::ArrowConfig & c);
 
 struct SharedMarker
 {
@@ -109,8 +106,7 @@ struct SharedMarker
 
   InteractiveMarker & marker() { return marker_; }
 
-  void applyChanges() {
-    server_->applyChanges(); }
+  void applyChanges() { server_->applyChanges(); }
 
 private:
   std::shared_ptr<InteractiveMarkerServer> server_;

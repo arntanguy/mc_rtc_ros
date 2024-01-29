@@ -11,9 +11,8 @@
 #include <csignal>
 
 #ifdef MC_RTC_ROS_IS_ROS2
-#include <rclcpp/rclcpp.hpp>
+#  include <rclcpp/rclcpp.hpp>
 #endif
-
 
 QApplication * app_ = nullptr;
 

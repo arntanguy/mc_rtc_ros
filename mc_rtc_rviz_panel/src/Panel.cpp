@@ -17,7 +17,7 @@
 #include "FormElement.h"
 #include "FormWidget.h"
 #include "GenericInputWidget.h"
-//#include "InteractiveMarkerWidget.h"
+// #include "InteractiveMarkerWidget.h"
 #include "LabelWidget.h"
 #include "NumberSliderWidget.h"
 #include "PlotTabWidget.h"
@@ -113,13 +113,11 @@ double getTimeout()
 
 struct PanelImpl
 {
-  PanelImpl()
-  : nh_(mc_rtc::ROSBridge::get_node_handle())
+  PanelImpl() : nh_(mc_rtc::ROSBridge::get_node_handle())
   {
 #ifdef MC_RTC_ROS_IS_ROS2
     marker_array_pub_ = nh_->create_publisher<MarkerArray>("/mc_rtc_rviz", 0);
-    int_server_ = std::make_shared<InteractiveMarkerServer>(
-        "mc_rtc_rviz_interactive_markers", nh_);
+    int_server_ = std::make_shared<InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers", nh_);
 #else
     marker_array_pub_ = nh_.advertise<MarkerArray>("/mc_rtc_rviz", 0);
     int_server_ = std::make_shared<InteractiveMarkerServer>("mc_rtc_rviz_interactive_markers"));
@@ -286,10 +284,7 @@ void Panel::got_stop()
   impl_->int_server_->applyChanges();
 #ifdef MC_RTC_ROS_IS_ROS2
   impl_->marker_array_pub_->publish(impl_->marker_array_);
-  if(rclcpp::ok())
-  {
-    rclcpp::spin_some(impl_->nh_);
-  }
+  if(rclcpp::ok()) { rclcpp::spin_some(impl_->nh_); }
 #else
   impl_->marker_array_.markers.clear(); // Needed in ROS1 but does not work for ROS2. Seems to work without it
   impl_->marker_array_pub_.publish(impl_->marker_array_);

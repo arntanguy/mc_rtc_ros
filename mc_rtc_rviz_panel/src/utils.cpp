@@ -81,8 +81,8 @@ std::vector<Marker> makeAxisMarker(double scale)
 }
 
 std::vector<Marker> makeArrowMarker(const Eigen::Vector3d & start,
-                                        const Eigen::Vector3d & end,
-                                        const mc_rtc::gui::ArrowConfig & c)
+                                    const Eigen::Vector3d & end,
+                                    const mc_rtc::gui::ArrowConfig & c)
 {
   std::vector<Marker> markers;
   Marker m;
@@ -101,8 +101,7 @@ std::vector<Marker> makeArrowMarker(const Eigen::Vector3d & start,
   return markers;
 }
 
-InteractiveMarkerControl & makeVisualControl(const std::vector<Marker> & visual_makers,
-                                                 InteractiveMarker & marker)
+InteractiveMarkerControl & makeVisualControl(const std::vector<Marker> & visual_makers, InteractiveMarker & marker)
 {
   InteractiveMarkerControl ret;
   ret.always_visible = true;
@@ -126,15 +125,15 @@ InteractiveMarker makeInteractiveMarker(const std::string & name, const std::vec
 }
 
 InteractiveMarker make6DMarker(const std::string & name,
-                                   const std::vector<Marker> & visual_markers,
-                                   bool control_position,
-                                   bool control_orientation,
-                                   bool move_x,
-                                   bool move_y,
-                                   bool move_z,
-                                   bool rotate_x,
-                                   bool rotate_y,
-                                   bool rotate_z)
+                               const std::vector<Marker> & visual_markers,
+                               bool control_position,
+                               bool control_orientation,
+                               bool move_x,
+                               bool move_y,
+                               bool move_z,
+                               bool rotate_x,
+                               bool rotate_y,
+                               bool rotate_z)
 {
   InteractiveMarker ret;
   ret.header.frame_id = "robot_map";
@@ -199,11 +198,11 @@ InteractiveMarker make6DMarker(const std::string & name,
 }
 
 InteractiveMarker make3DMarker(const std::string & name,
-                                   const std::vector<Marker> & visual_markers,
-                                   bool control_position,
-                                   bool /*move_x*/,
-                                   bool /*move_y*/,
-                                   bool /*move_z*/)
+                               const std::vector<Marker> & visual_markers,
+                               bool control_position,
+                               bool /*move_x*/,
+                               bool /*move_y*/,
+                               bool /*move_z*/)
 {
   return make6DMarker(name, visual_markers, control_position, false);
 }
@@ -230,9 +229,7 @@ InteractiveMarker makeXYThetaMarker(const std::string & name, bool readonly)
   return int_marker;
 }
 
-Marker getPointMarker(const Eigen::Vector3d & pos,
-                                          const mc_rtc::gui::Color & color,
-                                          double scale = 0.02)
+Marker getPointMarker(const Eigen::Vector3d & pos, const mc_rtc::gui::Color & color, double scale = 0.02)
 {
   Marker m;
   m.type = Marker::SPHERE;

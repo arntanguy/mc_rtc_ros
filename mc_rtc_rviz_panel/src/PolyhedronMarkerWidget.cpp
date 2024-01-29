@@ -7,9 +7,9 @@
 #include <mc_rbdyn/configuration_io.h>
 
 #ifdef MC_RTC_ROS_IS_ROS2
-#include <std_msgs/msg/color_rgba.hpp>
+#  include <std_msgs/msg/color_rgba.hpp>
 #else
-#include <std_msgs/ColorRGBA.h>
+#  include <std_msgs/ColorRGBA.h>
 #endif
 
 namespace mc_rtc_rviz

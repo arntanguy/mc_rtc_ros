@@ -68,8 +68,7 @@ set(HEADER_FILES
     FormElementContainer.h
     LabelWidget.h
     Schema.h
-    utils.h
-    )
+    utils.h)
 
 set(SOURCE_FILES
     ArrayLabelWidget.cpp
@@ -131,8 +130,7 @@ macro(panel_link_libraries target)
     _gui_objects
     PUBLIC $<TARGET_PROPERTY:${target},INTERFACE_COMPILE_DEFINITIONS>)
   target_compile_features(
-    _gui_objects
-    PUBLIC $<TARGET_PROPERTY:${target},INTERFACE_COMPILE_FEATURES>)
+    _gui_objects PUBLIC $<TARGET_PROPERTY:${target},INTERFACE_COMPILE_FEATURES>)
 endmacro()
 
 if(NOT ${FORCE_QT5} AND "${ROS_DISTRO}" STREQUAL "indigo")
@@ -151,25 +149,30 @@ panel_link_libraries(mc_rtc::mc_rtc_ros)
 panel_link_libraries(mc_rtc::mc_control_client)
 panel_link_libraries(rviz_common::rviz_common)
 panel_link_libraries(pluginlib::pluginlib)
-panel_link_libraries(visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
+panel_link_libraries(
+  visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
 panel_link_libraries(interactive_markers::interactive_markers)
 panel_link_libraries(tf2_ros::tf2_ros)
 
 add_library(${PROJECT_NAME} SHARED Panel.cpp ${HEADER_FILES} ${MOC_HEADERS}
-                            $<TARGET_OBJECTS:_gui_objects>)
-target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros mc_rtc::mc_control_client Qwt::Qwt)
+                                   $<TARGET_OBJECTS:_gui_objects>)
+target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros
+                                             mc_rtc::mc_control_client Qwt::Qwt)
 target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_rtc_ros)
 target_link_libraries(${PROJECT_NAME} PUBLIC mc_rtc::mc_control_client)
 target_link_libraries(${PROJECT_NAME} PUBLIC rviz_common::rviz_common)
 target_link_libraries(${PROJECT_NAME} PUBLIC pluginlib::pluginlib)
-target_link_libraries(${PROJECT_NAME} PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC interactive_markers::interactive_markers)
+target_link_libraries(
+  ${PROJECT_NAME}
+  PUBLIC visualization_msgs::visualization_msgs__rosidl_typesupport_cpp)
+target_link_libraries(${PROJECT_NAME}
+                      PUBLIC interactive_markers::interactive_markers)
 target_link_libraries(${PROJECT_NAME} PUBLIC tf2_ros::tf2_ros)
 
-# Causes the visibility macros to use dllexport rather than dllimport,
-# which is appropriate when building the dll but not consuming it.
-target_compile_definitions(${PROJECT_NAME} PRIVATE "RVIZ_DEFAULT_PLUGINS_BUILDING_LIBRARY")
-
+# Causes the visibility macros to use dllexport rather than dllimport, which is
+# appropriate when building the dll but not consuming it.
+target_compile_definitions(${PROJECT_NAME}
+                           PRIVATE "RVIZ_DEFAULT_PLUGINS_BUILDING_LIBRARY")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC)
 if(NOT ${FORCE_QT5} AND "${ROS_DISTRO}" STREQUAL "indigo")
@@ -183,15 +186,10 @@ install(
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
-)
+  RUNTIME DESTINATION bin)
 
-ament_export_libraries(
-  ${PROJECT_NAME}
-)
-ament_export_targets(
-  export_${PROJECT_NAME}
-)
+ament_export_libraries(${PROJECT_NAME})
+ament_export_targets(export_${PROJECT_NAME})
 
 add_executable(mc_rtc_gui main.cpp)
 target_link_libraries(mc_rtc_gui PUBLIC ${PROJECT_NAME})

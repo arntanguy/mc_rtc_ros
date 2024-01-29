@@ -697,14 +697,13 @@ static std::string next_marker_name()
 }
 
 template<typename DataT, bool rotation_only>
-InteractiveMarkerInput<DataT, rotation_only>::InteractiveMarkerInput(
-    QWidget * parent,
-    const std::string & name,
-    bool required,
-    const DataT & default_,
-    bool default_from_user,
-    bool interactive,
-    std::shared_ptr<InteractiveMarkerServer> int_server)
+InteractiveMarkerInput<DataT, rotation_only>::InteractiveMarkerInput(QWidget * parent,
+                                                                     const std::string & name,
+                                                                     bool required,
+                                                                     const DataT & default_,
+                                                                     bool default_from_user,
+                                                                     bool interactive,
+                                                                     std::shared_ptr<InteractiveMarkerServer> int_server)
 : FormElement(parent, name, required),
   marker_(int_server,
           next_marker_name(),
@@ -785,12 +784,11 @@ InteractiveMarkerInput<DataT, rotation_only>::InteractiveMarkerInput(
 }
 
 template<typename DataT, bool rotation_only>
-void InteractiveMarkerInput<DataT, rotation_only>::changed(
-    bool required,
-    const DataT & default_,
-    bool default_from_user,
-    bool interactive,
-    std::shared_ptr<InteractiveMarkerServer> int_server)
+void InteractiveMarkerInput<DataT, rotation_only>::changed(bool required,
+                                                           const DataT & default_,
+                                                           bool default_from_user,
+                                                           bool interactive,
+                                                           std::shared_ptr<InteractiveMarkerServer> int_server)
 {
   if(std::any_of(edits_.begin(), edits_.end(), [](const auto * edit) { return edit->hasFocus(); })) { return; }
   changed_(required);
@@ -826,8 +824,7 @@ void InteractiveMarkerInput<DataT, rotation_only>::fill(const mc_rtc::Configurat
 }
 
 template<typename DataT, bool rotation_only>
-void InteractiveMarkerInput<DataT, rotation_only>::handleRequest(
-    const InteractiveMarkerFeedbackConstPtr & feedback)
+void InteractiveMarkerInput<DataT, rotation_only>::handleRequest(const InteractiveMarkerFeedbackConstPtr & feedback)
 {
   locked_ = true;
   ready_ = true;

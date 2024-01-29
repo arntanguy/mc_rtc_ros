@@ -9,8 +9,7 @@
 namespace mc_rtc_rviz
 {
 
-DisplayTrajectoryWidget::DisplayTrajectoryWidget(const ClientWidgetParam & params,
-                                                 MarkerArray & markers)
+DisplayTrajectoryWidget::DisplayTrajectoryWidget(const ClientWidgetParam & params, MarkerArray & markers)
 : ClientWidget(params), markers_(markers), visible_(visible()), was_visible_(visible_)
 {
   auto layout = new QHBoxLayout(this);
@@ -113,8 +112,7 @@ void DisplayTrajectoryWidget::update(const sva::PTransformd & point, const mc_rt
 
 void DisplayTrajectoryWidget::configure(const mc_rtc::gui::LineConfig & config)
 {
-  path_.type = config.style == mc_rtc::gui::LineStyle::Dotted ? Marker::POINTS
-                                                              : Marker::LINE_STRIP;
+  path_.type = config.style == mc_rtc::gui::LineStyle::Dotted ? Marker::POINTS : Marker::LINE_STRIP;
   path_.header.frame_id = "robot_map";
   path_.header.stamp = mc_rtc::ROSBridge::get_node_handle()->now();
   path_.pose.orientation.w = 1.0;

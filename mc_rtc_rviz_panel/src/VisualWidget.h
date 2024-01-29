@@ -8,20 +8,20 @@
 #include "utils.h"
 
 #ifdef MC_RTC_ROS_IS_ROS2
-#include <visualization_msgs/msg/marker_array.hpp>
+#  include <visualization_msgs/msg/marker_array.hpp>
 #else
-#include <visualization_msgs/MarkerArray.h>
+#  include <visualization_msgs/MarkerArray.h>
 #endif
 
 namespace mc_rtc_rviz
 {
 
 #ifdef MC_RTC_ROS_IS_ROS2
-  using MarkerArry = visualization_msgs::msg::MarkerArray;
-  using Marker = visualization_msgs::msg::Marker;
+using MarkerArry = visualization_msgs::msg::MarkerArray;
+using Marker = visualization_msgs::msg::Marker;
 #else
-  using MarkerArry = visualization_msgs::MarkerArray;
-  using Marker = visualization_msgs::Marker;
+using MarkerArry = visualization_msgs::MarkerArray;
+using Marker = visualization_msgs::Marker;
 #endif
 
 struct VisualWidget : public ClientWidget
