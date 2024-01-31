@@ -12,16 +12,6 @@ project(
 
 find_package(ament_cmake REQUIRED)
 
-add_executable(mc_rtc_ticker src/mc_rtc_ticker)
-
-install(
-  TARGETS mc_rtc_ticker
-  EXPORT export_${PROJECT_NAME}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
-ament_export_targets(export_${PROJECT_NAME})
-
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
 
 ament_package()
